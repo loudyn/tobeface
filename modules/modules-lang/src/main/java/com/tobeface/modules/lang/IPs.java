@@ -8,12 +8,13 @@ import java.util.Random;
  * 
  */
 public final class IPs {
+	
+	private static final Random random = new Random();
 	/**
 	 * 
 	 * @return
 	 */
 	public static String nextIp() {
-		Random random = new Random();
 		IPBoudary boudary = ipBoudaries[random.nextInt(ipBoudaries.length)];
 		long ipAsLong = boudary.getStart() + random.nextInt((int) (boudary.getEnd() - boudary.getStart()) + 1);
 		return long2Ip(ipAsLong);

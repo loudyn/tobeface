@@ -1,0 +1,47 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tobeface</groupId>
+	<artifactId>tgenius</artifactId>
+	<version>0.0.1</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>tgenius-domain</module>
+		<module>tgenius-infrastructure</module>
+		<module>tgenius-service</module>
+		<module>tgenius-web</module>
+		<module>tgenius-service-impl</module>
+	</modules>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java-version>1.6</java-version>
+		<com.tobeface.modules.version>0.0.1</com.tobeface.modules.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-lang</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-domain</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-helper</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-orm</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>

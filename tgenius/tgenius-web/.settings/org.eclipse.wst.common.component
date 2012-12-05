@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="tgenius-web">
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <dependent-module archiveName="modules-web-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-web/modules-web">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="modules-lang-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-lang/modules-lang">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tgenius-service-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-service/tgenius-service">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tgenius-domain-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-domain/tgenius-domain">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="modules-domain-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-domain/modules-domain">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="modules-helper-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-helper/modules-helper">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="tgenius-web"/>
+        <property name="java-output-path" value="/tgenius-web/target/classes"/>
+    </wb-module>
+</project-modules>
