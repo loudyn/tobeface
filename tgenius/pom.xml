@@ -8,13 +8,14 @@
 	<modules>
 		<module>tgenius-domain</module>
 		<module>tgenius-infrastructure</module>
-		<module>tgenius-service</module>
+		<module>tgenius-application</module>
 		<module>tgenius-web</module>
-		<module>tgenius-service-impl</module>
+		<module>tgenius-application-impl</module>
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.6</java-version>
+		<org.springframework-version>3.1.0.RELEASE</org.springframework-version>
 		<com.tobeface.modules.version>0.0.1</com.tobeface.modules.version>
 	</properties>
 
@@ -40,6 +41,12 @@
 			<dependency>
 				<groupId>com.tobeface</groupId>
 				<artifactId>modules-orm</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-table</artifactId>
 				<version>${com.tobeface.modules.version}</version>
 			</dependency>
 		</dependencies>

@@ -4,13 +4,14 @@
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <dependent-module archiveName="modules-web-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-web/modules-web">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="modules-lang-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-lang/modules-lang">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="tgenius-service-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-service/tgenius-service">
+        <dependent-module archiveName="tgenius-application-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-application/tgenius-application">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="tgenius-domain-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-domain/tgenius-domain">
@@ -20,6 +21,15 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="modules-helper-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-helper/modules-helper">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tgenius-application-impl-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-application-impl/tgenius-application-impl">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="tgenius-infrastructure-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/tgenius-infrastructure/tgenius-infrastructure">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="modules-orm-0.0.1.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/modules-orm/modules-orm">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="tgenius-web"/>
