@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -90,12 +91,12 @@ final class XlsTable implements Table {
 																headers
 														);
 			
-			String cellValue = TableValues.downstreamConvert(
+			Object cellValue = TableValues.downstreamConvert(
 																converters,
 																ghost.ejector(obj, field).eject()
-															).toString();
+														);
 			
-			row.createCell(cellIndex).setCellValue(cellValue);
+			row.createCell(cellIndex).setCellValue(null == cellValue ? "" : cellValue.toString());
 		}
 	}
 
@@ -142,7 +143,13 @@ final class XlsTable implements Table {
 													);
 
 			TableValueConverters converters = field.getAnnotation(TableValueConverters.class);
-			String raw = row.getCell(cellIndex).getStringCellValue();
+			
+			String raw = null;
+			HSSFCell cell = row.getCell(cellIndex);
+			if(null != cell){
+				raw = cell.getStringCellValue();
+			}
+			
 			Object value = TableValues.upstreamConvert(converters, raw);
 			BeanUtils.setProperty(obj, field.getName(), value);
 		}
