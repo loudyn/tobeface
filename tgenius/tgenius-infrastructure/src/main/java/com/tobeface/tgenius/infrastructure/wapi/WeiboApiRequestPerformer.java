@@ -29,7 +29,6 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
 
-import com.tobeface.modules.helper.JsonHelper;
 import com.tobeface.modules.lang.Lang;
 
 /**
@@ -79,7 +78,7 @@ final class WeiboApiRequestPerformer {
 	 * @param req
 	 * @return
 	 */
-	static String perform(WeiboApiRequest req) {
+	static WeiboApiResponse perform(WeiboApiRequest req) {
 
 		HttpUriRequest httpReq = WeiboApiRequestPerformer.transform(req);
 		HttpEntity entity = null;
@@ -91,22 +90,12 @@ final class WeiboApiRequestPerformer {
 
 			HttpResponse resp = client.execute(httpReq);
 			entity = resp.getEntity();
-			return EntityUtils.toString(entity);
+			return new WeiboApiResponse(EntityUtils.toString(entity));
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
 		} finally {
 			EntityUtils.consumeQuietly(entity);
 		}
-	}
-
-	/**
-	 * 
-	 * @param req
-	 * @param resultClazz
-	 * @return
-	 */
-	static <T> T perform(WeiboApiRequest req, Class<T> resultClazz) {
-		return JsonHelper.fromJsonString(WeiboApiRequestPerformer.perform(req), resultClazz);
 	}
 
 	/**

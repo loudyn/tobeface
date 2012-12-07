@@ -53,7 +53,7 @@ public final class WeiboApiRequest {
 	}
 
 	private Object encodeURL(String raw) {
-		return CodeHelper.urlDecode(raw, "utf-8");
+		return CodeHelper.urlEncode(raw, "UTF-8");
 	}
 
 	/**
@@ -80,17 +80,8 @@ public final class WeiboApiRequest {
 	 * 
 	 * @return
 	 */
-	public String execute() {
+	public WeiboApiResponse execute() {
 		return WeiboApiRequestPerformer.perform(this);
-	}
-
-	/**
-	 * 
-	 * @param resultClazz
-	 * @return
-	 */
-	public <T> T execute(Class<T> resultClazz) {
-		return WeiboApiRequestPerformer.perform(this, resultClazz);
 	}
 
 	/**

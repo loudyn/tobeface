@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tobeface.tgenius.application.DigWeiboUserService;
 import com.tobeface.tgenius.domain.WeiboAppKeys;
@@ -20,6 +21,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
  * 
  */
 @Service
+@Transactional
 public class DigWeiboUserServiceImpl implements DigWeiboUserService {
 
 	private ExecutorService executor = Executors.newFixedThreadPool(20);
@@ -38,12 +40,28 @@ public class DigWeiboUserServiceImpl implements DigWeiboUserService {
 			public void run() {
 				WeiboAppKeys appKeys = weiboAppKeysRepository.findAnyAvaliable();
 				Iterator<WeiboUser> it = weiboApiService.findWhoKeywordLikes(appKeys, keyword);
-				while (it.hasNext()) {
-					WeiboUser entity = it.next();
-					weiboUserRepository.save(entity);
-				}
+				saveOrUpdateWeiboUsers(it);
 			}
 		});
+	}
+
+	protected void saveOrUpdateWeiboUsers(Iterator<WeiboUser> it) {
+		while (it.hasNext()) {
+
+			try {
+
+				WeiboUser entity = it.next();
+
+				if (weiboUserRepository.existsByName(entity.getName())) {
+					weiboUserRepository.update(entity);
+					continue;
+				}
+
+				weiboUserRepository.save(entity);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void digByTags(final String tags) {
@@ -53,10 +71,7 @@ public class DigWeiboUserServiceImpl implements DigWeiboUserService {
 			public void run() {
 				WeiboAppKeys appKeys = weiboAppKeysRepository.findAnyAvaliable();
 				Iterator<WeiboUser> it = weiboApiService.findWhoTagLikes(appKeys, tags);
-				while (it.hasNext()) {
-					WeiboUser entity = it.next();
-					weiboUserRepository.save(entity);
-				}
+				saveOrUpdateWeiboUsers(it);
 			}
 		});
 	}

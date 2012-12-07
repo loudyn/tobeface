@@ -1,6 +1,7 @@
 package com.tobeface.tgenius.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.tobeface.modules.domain.ValueObject;
 
@@ -10,9 +11,13 @@ import com.tobeface.modules.domain.ValueObject;
  * 
  */
 public class WeiboUserCompany implements ValueObject<WeiboUserCompany> {
+	@JsonProperty("begin_year")
 	private int beginYear;
+	@JsonProperty("end_year")
 	private int endYear;
+	@JsonProperty("company_name")
 	private String name;
+	@JsonProperty("department_name")
 	private String departmentName;
 
 	public int getBeginYear() {
@@ -50,10 +55,10 @@ public class WeiboUserCompany implements ValueObject<WeiboUserCompany> {
 	@Override
 	public boolean sameValueAs(WeiboUserCompany other) {
 		return new EqualsBuilder().append(getBeginYear(), other.getBeginYear())
-									.append(getEndYear(), other.getEndYear())
-									.append(getName(), other.getName())
-									.append(getDepartmentName(), other.getDepartmentName())
-									.isEquals();
+				.append(getEndYear(), other.getEndYear())
+				.append(getName(), other.getName())
+				.append(getDepartmentName(), other.getDepartmentName())
+				.isEquals();
 	}
 
 }

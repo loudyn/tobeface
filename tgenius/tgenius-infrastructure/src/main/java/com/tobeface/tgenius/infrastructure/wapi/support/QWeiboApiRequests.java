@@ -17,7 +17,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest.WeiboApiRequestV
 final class QWeiboApiRequests {
 
 	private static final String SEARCH_U = "http://open.t.qq.com/api/search/user";
-	private static final String SEARCH_U_BY_TAGS = " http://open.t.qq.com/api/search/userbytag";
+	private static final String SEARCH_U_BY_TAGS = "http://open.t.qq.com/api/search/userbytag";
 	private static final String SEARCH_T = "http://open.t.qq.com/api/search/t";
 	private static final String TRENDS_T = "http://open.t.qq.com/api/trends/t";
 

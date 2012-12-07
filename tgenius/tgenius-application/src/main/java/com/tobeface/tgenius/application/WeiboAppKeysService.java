@@ -1,5 +1,6 @@
 package com.tobeface.tgenius.application;
 
+import com.tobeface.modules.domain.Page;
 import com.tobeface.tgenius.domain.WeiboAppKeys;
 
 /**
@@ -33,5 +34,7 @@ public interface WeiboAppKeysService {
 	 * @param id
 	 */
 	void delete(String id);
+
+	Page<WeiboAppKeys> queryPage(Page<WeiboAppKeys> page);
 
 }

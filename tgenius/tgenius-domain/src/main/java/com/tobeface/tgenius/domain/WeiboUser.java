@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.tobeface.modules.domain.DomainObject;
 import com.tobeface.modules.helper.JsonHelper;
@@ -18,29 +20,47 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@JsonProperty("comp")
 	private List<WeiboUserCompany> companies = new ArrayList<WeiboUserCompany>();
+	@JsonProperty("edu")
 	private List<WeiboUserEducation> educations = new ArrayList<WeiboUserEducation>();
 
+	@JsonProperty("name")
 	private String name;
+	@JsonProperty("nick")
 	private String nickname;
+	@JsonProperty("location")
 	private String location;
+	@JsonProperty("homepage")
 	private String homepage;
+	@JsonProperty("introduction")
 	private String intro;
 
-	private String statecode;
-	private String citycode;
-	private String regioncode;
+	@JsonProperty("industry_code")
+	private String careercode;
+	private String careername;
 
+	@JsonProperty("verifyinfo")
+	private String verifyInfo;
+
+	@JsonProperty("sex")
+	private int sex;
+	@JsonProperty("birth_year")
 	private int birthYear;
+	@JsonProperty("fansnum")
 	private int fansCount;
+	@JsonProperty("isvip")
 	private boolean isVip;
+	@JsonProperty("isent")
 	private boolean isEnterprise;
+	@JsonProperty("isrealname")
 	private boolean isRealname;
 
 	public List<WeiboUserCompany> getCompanies() {
 		return companies;
 	}
 
+	@JsonIgnore
 	public String getCompaniesAsString() {
 		return JsonHelper.toJsonString(getCompanies());
 	}
@@ -53,6 +73,7 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 		return educations;
 	}
 
+	@JsonIgnore
 	public String getEducationsAsString() {
 		return JsonHelper.toJsonString(getEducations());
 	}
@@ -101,28 +122,36 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 		this.intro = intro;
 	}
 
-	public String getStatecode() {
-		return statecode;
+	public String getCareercode() {
+		return careercode;
 	}
 
-	public void setStatecode(String statecode) {
-		this.statecode = statecode;
+	public void setCareercode(String careercode) {
+		this.careercode = careercode;
 	}
 
-	public String getCitycode() {
-		return citycode;
+	public String getCareername() {
+		return careername;
 	}
 
-	public void setCitycode(String citycode) {
-		this.citycode = citycode;
+	public void setCareername(String careername) {
+		this.careername = careername;
 	}
 
-	public String getRegioncode() {
-		return regioncode;
+	public String getVerifyInfo() {
+		return verifyInfo;
 	}
 
-	public void setRegioncode(String regioncode) {
-		this.regioncode = regioncode;
+	public void setVerifyInfo(String verifyInfo) {
+		this.verifyInfo = verifyInfo;
+	}
+
+	public int getSex() {
+		return sex;
+	}
+
+	public void setSex(int sex) {
+		this.sex = sex;
 	}
 
 	public int getBirthYear() {
@@ -164,7 +193,7 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 	public void setRealname(boolean isRealname) {
 		this.isRealname = isRealname;
 	}
-	
+
 	@Override
 	public boolean sameIdentityAs(WeiboUser other) {
 		return new EqualsBuilder().append(getName(), other.getName()).isEquals();

@@ -18,7 +18,7 @@ public class MybatisWeiboAppKeysRepository extends MybatisRepositorySupport<Stri
 
 	@Override
 	public WeiboAppKeys findAnyAvaliable() {
-		return null;
+		return (WeiboAppKeys) getSqlSession().selectOne(getNamespace().concat(".anyOne"));
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class MybatisWeiboAppKeysRepository extends MybatisRepositorySupport<Stri
 		Preconditions.hasText(id);
 		try {
 
-			getSqlSession().delete(getNamespace().concat("deleteById"), id);
+			getSqlSession().delete(getNamespace().concat(".deleteByApiKey"), id);
 		} catch (Exception e) {
 			throw new DataAccessException(e);
 		}

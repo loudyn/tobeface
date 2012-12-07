@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tobeface.tgenius.domain.WeiboAppKeys">
+
+<resultMap type="WeiboAppKeys" id="weiboAppKeysResult">
+	<id property="apiKey" column="api_key"/>
+	<result property="apiSecret" column="api_secret"/>
+	<result property="accessToken" column="access_token"/>
+	<result property="callbackUrl" column="callback_url"/>
+	<result property="authorizationUrl" column="authorization_url"/>
+	<result property="refreshAccessTokenUrl" column="refresh_access_token_url"/>
+	<result property="expiresIn" column="expires_in"/>
+	<result property="otherParams" column="other_params"/>
+</resultMap>
+
+<sql id="commonSelect">
+	select 
+		self.*
+	from weibo_app_keys self 
+</sql>
+
+<insert id="save" keyProperty="apiKey" >
+	insert into weibo_app_keys(api_key,api_secret,access_token,callback_url,authorization_url,refresh_access_token_url,expires_in,other_params) 
+			values(#{apiKey},#{apiSecret},#{accessToken},#{callbackUrl},#{authorizationUrl},#{refreshAccessTokenUrl},#{expiresIn},#{otherParams})				
+</insert>
+<update id="update" >
+	update weibo_app_keys 
+			set api_secret=#{apiSecret},access_token=#{accessToken},callback_url=#{callbackUrl},authorization_url=#{authorizationUrl},refresh_access_token_url=#{refreshAccessTokenUrl},expires_in=#{expiresIn},other_params=#{otherParams} where api_key=#{apiKey}
+</update>
+
+<delete id="delete" >
+	delete from weibo_app_keys where api_key=#{id}
+</delete>
+
+<delete id="deleteByApiKey" >
+	delete from weibo_app_keys where api_key=#{id}
+</delete>
+
+<select id="get" resultMap="weiboAppKeysResult">
+	<include refid="commonSelect"/>
+	where self.api_key=#{id}
+</select>
+
+<select id="anyOne" resultMap="weiboAppKeysResult">
+	<include refid="commonSelect"/>
+	limit 1 
+</select>
+
+<select id="query" resultMap="weiboAppKeysResult">
+	<include refid="commonSelect"/>
+</select>
+
+<select id="queryPage" resultMap="weiboAppKeysResult">
+	<include refid="commonSelect"/>
+</select>
+</mapper>

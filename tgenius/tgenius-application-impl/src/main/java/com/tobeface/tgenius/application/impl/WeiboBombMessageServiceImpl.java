@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.tobeface.modules.lang.Each;
 import com.tobeface.modules.lang.Lang;
@@ -23,6 +24,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
  * 
  */
 @Service
+@Transactional
 public class WeiboBombMessageServiceImpl implements WeiboBombMessageService {
 
 	private ExecutorService executor = Executors.newFixedThreadPool(20);

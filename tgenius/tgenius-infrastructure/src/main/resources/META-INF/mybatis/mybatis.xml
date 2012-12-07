@@ -7,6 +7,11 @@
 		<setting name="aggressiveLazyLoading" value="false"/>
 	</settings>
 	
+	<typeAliases>
+		<typeAlias type="com.tobeface.tgenius.domain.WeiboAppKeys" alias="WeiboAppKeys" />
+		<typeAlias type="com.tobeface.tgenius.domain.WeiboUser" alias="WeiboUser" />
+	</typeAliases>
+	
 	<plugins>
 		<plugin interceptor="com.tobeface.modules.orm.mybatis.MybatisPagePlugin">
 			<property name="dialect" value="com.tobeface.modules.orm.dialect.impl.MySQLDialect" />

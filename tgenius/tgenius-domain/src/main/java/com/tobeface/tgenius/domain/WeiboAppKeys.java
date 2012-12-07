@@ -18,9 +18,9 @@ public class WeiboAppKeys implements DomainObject<WeiboAppKeys>, Serializable {
 
 	private String authorizationUrl;
 	private String refreshAccessTokenUrl;
+	private String callbackUrl;
 	private String apiKey;
 	private String apiSecret;
-	private String callback;
 	private String accessToken;
 	private long expiresIn;
 
@@ -42,6 +42,14 @@ public class WeiboAppKeys implements DomainObject<WeiboAppKeys>, Serializable {
 		this.refreshAccessTokenUrl = refreshAccessTokenUrl;
 	}
 
+	public String getCallbackUrl() {
+		return callbackUrl;
+	}
+
+	public void setCallbackUrl(String callbackUrl) {
+		this.callbackUrl = callbackUrl;
+	}
+
 	public String getApiKey() {
 		return apiKey;
 	}
@@ -56,14 +64,6 @@ public class WeiboAppKeys implements DomainObject<WeiboAppKeys>, Serializable {
 
 	public void setApiSecret(String apiSecret) {
 		this.apiSecret = apiSecret;
-	}
-
-	public String getCallback() {
-		return callback;
-	}
-
-	public void setCallback(String callback) {
-		this.callback = callback;
 	}
 
 	public String getAccessToken() {

@@ -10,5 +10,23 @@ import com.tobeface.tgenius.domain.WeiboUser;
  */
 public interface WeiboUserService {
 
+	/**
+	 * 
+	 * @param page
+	 * @return
+	 */
 	Page<WeiboUser> queryPage(Page<WeiboUser> page);
+
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	WeiboUser queryUniqueByName(String name);
+
+	/**
+	 * 
+	 * @param which
+	 */
+	void deleteByName(String which);
 }

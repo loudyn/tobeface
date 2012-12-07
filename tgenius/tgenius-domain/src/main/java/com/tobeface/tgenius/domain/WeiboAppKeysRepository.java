@@ -1,5 +1,7 @@
 package com.tobeface.tgenius.domain;
 
+import com.tobeface.modules.domain.Page;
+
 /**
  * 
  * @author loudyn
@@ -37,4 +39,11 @@ public interface WeiboAppKeysRepository {
 	 * @param id
 	 */
 	void delete(String id);
+
+	/**
+	 * 
+	 * @param page
+	 * @return
+	 */
+	Page<WeiboAppKeys> queryPage(Page<WeiboAppKeys> page);
 }

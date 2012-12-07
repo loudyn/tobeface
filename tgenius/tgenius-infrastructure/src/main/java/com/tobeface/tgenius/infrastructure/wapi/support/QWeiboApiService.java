@@ -9,6 +9,8 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.google.common.hash.BloomFilter;
@@ -20,6 +22,7 @@ import com.tobeface.tgenius.domain.WeiboMention;
 import com.tobeface.tgenius.domain.WeiboTalking;
 import com.tobeface.tgenius.domain.WeiboUser;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
 
 /**
@@ -30,35 +33,32 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
 @Component
 public class QWeiboApiService implements WeiboApiService {
 
-	@SuppressWarnings("unchecked")
-	public void sendLetter(WeiboAppKeys appKeys, String which, WeiboLetter letter) {
-		Map<String, Object> result = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent()).execute(Map.class);
-		if (isNotOkResult(result)) {}
-	}
+	private Logger logger = LoggerFactory.getLogger(QWeiboApiService.class);
 
-	private boolean isNotOkResult(Map<String, Object> result) {
-		int ret = (Integer) result.get("ret");
-		return ret != 0;
+	public void sendLetter(WeiboAppKeys appKeys, String which, WeiboLetter letter) {
+		WeiboApiResponse resp = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent()).execute();
+		if (!resp.isOK()) {
+			logger.warn("send fail.", resp.getErrors());
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public void sendMentionByRelay(WeiboAppKeys appKeys, WeiboMention mention) {
-		Map<String, Object> result = QWeiboApiRequests.newTrendsTwitter(appKeys).execute(Map.class);
-		List<Map<String, Object>> infos = extractInfos(result);
+		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute();
+		List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 		if (infos.isEmpty()) {
 
 		}
 
 		String relayId = (String) infos.get(0).get("id");
 		WeiboApiRequest addRelay = QWeiboApiRequests.newAddRelay(appKeys, relayId, mention.getContent());
-		Map<String, Object> addResult = addRelay.execute(Map.class);
-		if (isNotOkResult(addResult)) {
+		WeiboApiResponse relayResp = addRelay.execute();
+		if (!relayResp.isOK()) {
 
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void sendMentionByTalking(WeiboAppKeys appKeys, WeiboTalking talking, WeiboMention mention) {
 		Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, 1);
@@ -66,179 +66,116 @@ public class QWeiboApiService implements WeiboApiService {
 			mention.mention(username);
 		}
 
-		Map<String, Object> result = QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent()).execute(Map.class);
-		if (isNotOkResult(result)) {}
+		WeiboApiResponse resp = QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent()).execute();
+		if (!resp.isOK()) {
+
+		}
 
 	}
 
 	@Override
 	public Iterator<WeiboUser> findWhoTagLikes(final WeiboAppKeys appKeys, final String tags) {
-		final AtomicInteger page = new AtomicInteger(1);
-		final Queue<WeiboUser> those = new LinkedList<WeiboUser>();
-		final BloomFilter<CharSequence> bloom = BloomFilter.create(Funnels.stringFunnel(), 10000);
-		return new Iterator<WeiboUser>() {
+		return new LazyWeiboApiRequestIterator<WeiboUser>(appKeys) {
 
 			@Override
-			public boolean hasNext() {
-				if (null != those.peek()) {
-					return true;
-				}
-
-				computeNextTagLikes(appKeys, tags, those, page.getAndIncrement(), bloom);
-				return null != those.peek();
+			protected void lazyRequest(WeiboAppKeys appKeys, Queue<WeiboUser> queue, BloomFilter<CharSequence> filter, int page) {
+				computeNextTagLikes(appKeys, queue, filter, page, tags);
 			}
-
-			@Override
-			public WeiboUser next() {
-				return those.poll();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-
 		};
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void computeNextTagLikes(WeiboAppKeys appKeys, String tags, Queue<WeiboUser> those, int page, BloomFilter<CharSequence> bloom) {
+	protected void computeNextTagLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, BloomFilter<CharSequence> filter, int page, String tags) {
 		try {
 
-			Map<String, Object> result = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute(Map.class);
-			List<Map<String, Object>> infos = extractInfos(result);
+			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute();
+			if (!resp.isOK()) {
+				logger.error(resp.getErrors());
+			}
+
+			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 			for (Map<String, Object> info : infos) {
 				String name = (String) info.get("name");
-				if (bloom.mightContain(name)) {
-					continue;
-				}
-
-				WeiboUser entity = findWeiboUserByName(appKeys, name);
-				if (null != entity) {
-					those.add(entity);
-					bloom.put(name);
-				}
+				name2WeiboUser(appKeys, name, filter, result);
 			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private List<Map<String, Object>> extractInfos(Map<String, Object> result) {
-		if (isNotOkResult(result)) {
-			return Collections.emptyList();
+	private void name2WeiboUser(WeiboAppKeys appKeys, String name, BloomFilter<CharSequence> bloom, Queue<WeiboUser> those) {
+		if (bloom.mightContain(name)) {
+			return;
 		}
 
-		Map<String, Object> data = (Map<String, Object>) result.get("data");
-		return (List<Map<String, Object>>) data.get("infos");
+		WeiboUser entity = findWeiboUserByName(appKeys, name);
+		if (null != entity) {
+			those.add(entity);
+			bloom.put(name);
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private WeiboUser findWeiboUserByName(WeiboAppKeys appKeys, String name) {
-		Map<String, Object> result = QWeiboApiRequests.newOtherInfo(appKeys, name).execute(Map.class);
-		if (isNotOkResult(result)) {
+		WeiboApiResponse resp = QWeiboApiRequests.newOtherInfo(appKeys, name).execute();
+		if (!resp.isOK()) {
 			return null;
 		}
 
-		Map<String, Object> infoData = (Map<String, Object>) result.get("data");
-		return JsonHelper.newfor(infoData, WeiboUser.class);
+		Map<String, Object> data = (Map<String, Object>) resp.getResult().on("data").get();
+		return JsonHelper.newfor(data, WeiboUser.class);
 	}
 
 	@Override
 	public Iterator<WeiboUser> findWhoKeywordLikes(final WeiboAppKeys appKeys, final String keyword) {
-		final AtomicInteger page = new AtomicInteger(1);
-		final Queue<WeiboUser> those = new LinkedList<WeiboUser>();
-		final BloomFilter<CharSequence> bloom = BloomFilter.create(Funnels.stringFunnel(), 10000);
-		return new Iterator<WeiboUser>() {
+		return new LazyWeiboApiRequestIterator<WeiboUser>(appKeys) {
 
 			@Override
-			public boolean hasNext() {
-				if (null != those.peek()) {
-					return true;
-				}
-
-				computeNextKeywordLikes(appKeys, keyword, those, page.getAndIncrement(), bloom);
-				return null != those.peek();
+			protected void lazyRequest(WeiboAppKeys appKeys, Queue<WeiboUser> result, BloomFilter<CharSequence> filter, int page) {
+				computeNextKeywordLikes(appKeys, result, filter, page, keyword);
 			}
-
-			@Override
-			public WeiboUser next() {
-				return those.poll();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-
 		};
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void computeNextKeywordLikes(WeiboAppKeys appKeys, String keyword, Queue<WeiboUser> those, int page, BloomFilter<CharSequence> bloom) {
+	protected void computeNextKeywordLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, BloomFilter<CharSequence> filter, int page, String keyword) {
 		try {
 
-			Map<String, Object> result = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute(Map.class);
-			List<Map<String, Object>> infos = extractInfos(result);
+			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute();
+			if (!resp.isOK()) {
+				logger.error(resp.getErrors());
+			}
+			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 
 			for (Map<String, Object> info : infos) {
 				String name = (String) info.get("name");
-				if (bloom.mightContain(name)) {
-					continue;
-				}
-
-				WeiboUser entity = findWeiboUserByName(appKeys, name);
-				if (null != entity) {
-					those.add(entity);
-					bloom.put(name);
-				}
+				name2WeiboUser(appKeys, name, filter, result);
 			}
 		} catch (Exception ignore) {
-
+			ignore.printStackTrace();
 		}
 	}
 
 	public Iterator<String> findWhoTalkabout(final WeiboAppKeys appKeys, final WeiboTalking talking) {
-
-		final AtomicInteger page = new AtomicInteger(1);
-		final Queue<String> those = new LinkedList<String>();
-		final BloomFilter<CharSequence> bloom = BloomFilter.create(Funnels.stringFunnel(), 1000);
-		return new Iterator<String>() {
+		return new LazyWeiboApiRequestIterator<String>(appKeys) {
 
 			@Override
-			public boolean hasNext() {
-				if (null != those.peek()) {
-					return true;
-				}
-
-				computeNextTalkabout(those, appKeys, talking, page.getAndIncrement(), bloom);
-				return null != those.peek();
+			protected void lazyRequest(WeiboAppKeys appKeys, Queue<String> result, BloomFilter<CharSequence> filter, int page) {
+				computeNextTalkabout(appKeys, result, filter, page, talking);
 			}
-
-			@Override
-			public String next() {
-				return those.poll();
-			}
-
-			@Override
-			public void remove() {
-				throw new UnsupportedOperationException();
-			}
-
 		};
 	}
 
-	protected void computeNextTalkabout(Queue<String> those, WeiboAppKeys appKeys, WeiboTalking talking, int page, BloomFilter<CharSequence> bloom) {
+	protected void computeNextTalkabout(WeiboAppKeys appKeys, Queue<String> result, BloomFilter<CharSequence> filter, int page, WeiboTalking talking) {
 
 		try {
 			Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, page);
 			for (String username : usernames) {
-				if (bloom.mightContain(username)) {
+				if (filter.mightContain(username)) {
 					continue;
 				}
-				those.add(username);
-				bloom.put(username);
+				result.add(username);
+				filter.put(username);
 			}
 		} catch (Exception e) {
 			// log and ignore
@@ -248,15 +185,54 @@ public class QWeiboApiService implements WeiboApiService {
 	@SuppressWarnings("unchecked")
 	private Set<String> findWhoTalkaboutInternal(WeiboAppKeys appKeys, WeiboTalking talking, int page) {
 
-		Map<String, Object> result = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute(Map.class);
-		if (isNotOkResult(result)) {
+		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute();
+		if (resp.isOK()) {
 			// log and just return
 			return Collections.emptySet();
 		}
 
-		Map<String, Object> data = (Map<String, Object>) result.get("data");
-		Map<String, String> users = (Map<String, String>) data.get("user");
+		Map<String, String> users = (Map<String, String>) resp.getResult().on("data").on("user");
 		return users.keySet();
+	}
+
+	/**
+	 * 
+	 * @author loudyn
+	 *
+	 */
+	abstract class LazyWeiboApiRequestIterator<T> implements Iterator<T> {
+		final WeiboAppKeys appKeys;
+
+		Queue<T> result = new LinkedList<T>();
+		BloomFilter<CharSequence> filter = BloomFilter.create(Funnels.stringFunnel(), 10000);
+		AtomicInteger page = new AtomicInteger(1);
+
+		LazyWeiboApiRequestIterator(WeiboAppKeys appKeys) {
+			this.appKeys = appKeys;
+		}
+
+		@Override
+		public boolean hasNext() {
+			if (null != result.peek()) {
+				return true;
+			}
+
+			lazyRequest(appKeys, result, filter, page.getAndIncrement());
+			return null != result.peek();
+		}
+
+		protected abstract void lazyRequest(WeiboAppKeys appKeys, Queue<T> result, BloomFilter<CharSequence> filter, int page);
+
+		@Override
+		public T next() {
+			return result.poll();
+		}
+
+		@Override
+		public void remove() {
+			throw new UnsupportedOperationException();
+		}
+
 	}
 
 }

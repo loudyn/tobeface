@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tobeface.modules.domain.Page;
 import com.tobeface.tgenius.application.WeiboAppKeysService;
 import com.tobeface.tgenius.domain.WeiboAppKeys;
 import com.tobeface.tgenius.domain.WeiboAppKeysRepository;
@@ -35,4 +36,10 @@ public class WeiboAppKeysServiceImpl implements WeiboAppKeysService {
 	public void delete(String id) {
 		appKeysRepository.delete(id);
 	}
+
+	@Override
+	public Page<WeiboAppKeys> queryPage(Page<WeiboAppKeys> page) {
+		return appKeysRepository.queryPage(page);
+	}
+
 }

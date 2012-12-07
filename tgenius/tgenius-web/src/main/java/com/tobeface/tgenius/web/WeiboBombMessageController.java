@@ -26,7 +26,7 @@ import com.tobeface.tgenius.domain.WeiboTalking;
  * 
  */
 @Controller
-@RequestMapping("/weibo-bomb")
+@RequestMapping("/weibo-bomb-msg")
 public class WeiboBombMessageController extends ControllerSupport {
 
 	@Autowired
