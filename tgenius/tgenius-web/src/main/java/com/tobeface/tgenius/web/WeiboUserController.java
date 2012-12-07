@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.tobeface.modules.domain.Page;
+import com.tobeface.modules.helper.CodeHelper;
 import com.tobeface.modules.lang.Each;
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.file.WriteFileToCommand;
@@ -47,16 +48,22 @@ public class WeiboUserController extends ControllerSupport {
 		return listView();
 	}
 
-	@RequestMapping(value = "/dump-csv/", method = RequestMethod.POST)
+	@RequestMapping(value = "/dump-xls/", method = RequestMethod.GET)
 	public void dumpAsCsv(HttpServletResponse resp) {
 		try {
 
-			Webs.prepareDownload(resp, "weibo-user.csv", ContentType.EXCEL);
+			Webs.prepareDownload(resp, "weibo-user.xls", ContentType.EXCEL);
 
 			List<WeiboUser> entities = weiboUserService.query(new Object());
-			File temp = File.createTempFile("dump", ".csv");
-			Table csv = Tables.newCsv(temp);
-			csv.insert(entities);
+			File temp = File.createTempFile("dump", ".xls");
+			String templatename = CodeHelper.urlDecode(
+															getClass().getResource("/META-INF/xls/template.xls").getFile(),
+															"UTF-8"
+														);
+			
+			File template = new File(templatename);
+			Table xls = Tables.newXls(temp, template);
+			xls.insert(entities);
 
 			new WriteFileToCommand(temp, resp.getOutputStream(), false).execute();
 		} catch (IOException e) {
@@ -81,6 +88,7 @@ public class WeiboUserController extends ControllerSupport {
 				weiboUserService.deleteByName(which);
 			}
 		});
+
 		return REDIRECT_LIST;
 	}
 

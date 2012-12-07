@@ -11,6 +11,8 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import com.tobeface.modules.domain.DomainObject;
 import com.tobeface.modules.helper.JsonHelper;
 import com.tobeface.modules.table.annotations.TableField;
+import com.tobeface.modules.table.annotations.TableValueConverter;
+import com.tobeface.modules.table.annotations.TableValueConverters;
 
 /**
  * 
@@ -27,47 +29,52 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 	private List<WeiboUserEducation> educations = new ArrayList<WeiboUserEducation>();
 
 	@JsonProperty("name")
-	@TableField(columnIndex = 0)
+	@TableField(columnIndex = 0, columnName = "用户名")
 	private String name;
 	@JsonProperty("nick")
-	@TableField(columnIndex = 1)
+	@TableField(columnIndex = 1, columnName = "昵称")
 	private String nickname;
 	@JsonProperty("location")
-	@TableField(columnIndex = 2)
+	@TableField(columnIndex = 2, columnName = "所在地")
 	private String location;
 	@JsonProperty("homepage")
-	@TableField(columnIndex = 3)
+	@TableField(columnIndex = 3, columnName = "个人主页")
 	private String homepage;
 	@JsonProperty("introduction")
-	@TableField(columnIndex = 4)
+	@TableField(columnIndex = 4, columnName = "个人简介")
 	private String intro;
 
 	@JsonProperty("industry_code")
 	private String careercode;
-	@TableField(columnIndex = 5)
+	@TableField(columnIndex = 5, columnName = "所在行业")
 	private String careername;
 
 	@JsonProperty("verifyinfo")
-	@TableField(columnIndex = 6)
+	@TableField(columnIndex = 6, columnName = "认证信息")
 	private String verifyInfo;
 
 	@JsonProperty("sex")
-	@TableField(columnIndex = 7)
+	@TableField(columnIndex = 7, columnName = "性别")
+	@TableValueConverters(downstream = { @TableValueConverter(type = SexConverter.class, method = "convert") })
 	private int sex;
 	@JsonProperty("birth_year")
-	@TableField(columnIndex = 8)
+	@TableField(columnIndex = 8, columnName = "出生年份")
+	@TableValueConverters()
 	private int birthYear;
 	@JsonProperty("fansnum")
-	@TableField(columnIndex = 9)
+	@TableField(columnIndex = 9, columnName = "粉丝数目")
 	private int fansCount;
 	@JsonProperty("isvip")
-	@TableField(columnIndex = 10)
+	@TableField(columnIndex = 10, columnName = "是否认证用户")
+	@TableValueConverters(downstream = { @TableValueConverter(type = BooleanConverter.class, method = "convert") })
 	private boolean isVip;
 	@JsonProperty("isent")
-	@TableField(columnIndex = 11)
+	@TableField(columnIndex = 11, columnName = "是否企业用户")
+	@TableValueConverters(downstream = { @TableValueConverter(type = BooleanConverter.class, method = "convert") })
 	private boolean isEnterprise;
 	@JsonProperty("isrealname")
-	@TableField(columnIndex = 12)
+	@TableField(columnIndex = 12, columnName = "是否实名认证")
+	@TableValueConverters(downstream = { @TableValueConverter(type = BooleanConverter.class, method = "convert") })
 	private boolean isRealname;
 
 	public List<WeiboUserCompany> getCompanies() {
@@ -213,4 +220,35 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 		return new EqualsBuilder().append(getName(), other.getName()).isEquals();
 	}
 
+	/**
+	 * 
+	 * @author loudyn
+	 * 
+	 */
+	public static class BooleanConverter {
+		/**
+		 * 
+		 * @param value
+		 * @return
+		 */
+		public String convert(boolean value) {
+			return value ? "是" : "否";
+		}
+	}
+
+	/**
+	 * 
+	 * @author loudyn
+	 * 
+	 */
+	public static class SexConverter {
+		/**
+		 * 
+		 * @param value
+		 * @return
+		 */
+		public String convert(int value) {
+			return (value == 1) ? "男" : (value == 2) ? "女" : "未填写";
+		}
+	}
 }

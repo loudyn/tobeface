@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tobeface.modules.lang.Files;
@@ -38,7 +39,7 @@ public class WeiboBombMessageController extends ControllerSupport {
 	 * @return
 	 */
 	@RequestMapping(value = "/letter-by-names/", method = RequestMethod.POST)
-	public String publishLetterByNames(String namesString, WeiboLetter letter) {
+	public String publishLetterByNames(@RequestParam("names") String namesString, WeiboLetter letter) {
 		bombMessageService.publishLetterByNames(Strings.split(namesString, ";"), letter);
 		return null;
 	}
@@ -50,7 +51,7 @@ public class WeiboBombMessageController extends ControllerSupport {
 	 * @return
 	 */
 	@RequestMapping(value = "/letter-by-names-file/", method = RequestMethod.POST)
-	public String publishLetterByNamesFile(MultipartFile file, String fileEncoding, WeiboLetter letter) {
+	public String publishLetterByNamesFile(@RequestParam("names") MultipartFile file, String fileEncoding, WeiboLetter letter) {
 
 		try {
 

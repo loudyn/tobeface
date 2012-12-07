@@ -9,7 +9,6 @@
 	<artifactId>tgenius-infrastructure</artifactId>
 
 	<dependencies>
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>modules-orm</artifactId>
@@ -18,6 +17,12 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>tgenius-domain</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.1</version>
 		</dependency>
 
 		<!-- Spring -->
