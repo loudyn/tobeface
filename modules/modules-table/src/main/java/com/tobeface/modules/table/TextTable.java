@@ -74,7 +74,7 @@ class TextTable implements Table {
 				List<String> values = Lang.transform(items, new Function<TableItem, String>() {
 
 					public String apply(TableItem input) {
-						return input.value.toString();
+						return null == input.value ? "" : input.value.toString();
 					}
 
 				});
