@@ -11,9 +11,9 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import com.google.common.io.LineProcessor;
 import com.tobeface.modules.lang.Each;
-import com.tobeface.modules.lang.Files;
 import com.tobeface.modules.lang.Function;
 import com.tobeface.modules.lang.Ghost;
 import com.tobeface.modules.lang.Lang;
@@ -79,8 +79,13 @@ class TextTable implements Table {
 
 				});
 
-				String line = Strings.join(values, getSplitter()).concat(System.getProperty("line.separator"));
-				Files.appendTo(workspace, line, "UTF-8");
+				try {
+
+					String line = Strings.join(values, getSplitter()).concat(System.getProperty("line.separator"));
+					Files.append(line, workspace, Charsets.UTF_8);
+				} catch (Exception e) {
+					throw Lang.uncheck(e);
+				}
 			}
 		};
 
@@ -125,7 +130,7 @@ class TextTable implements Table {
 
 			};
 
-			return com.google.common.io.Files.readLines(workspace, Charsets.UTF_8, processor);
+			return Files.readLines(workspace, Charsets.UTF_8, processor);
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
 		}
