@@ -11,6 +11,7 @@ import com.tobeface.modules.domain.ValueObject;
  * 
  */
 public class WeiboUserCompany implements ValueObject<WeiboUserCompany> {
+	
 	@JsonProperty("begin_year")
 	private int beginYear;
 	@JsonProperty("end_year")

@@ -23,6 +23,7 @@ import com.tobeface.tgenius.domain.WeiboTalking;
 import com.tobeface.tgenius.domain.WeiboUser;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse.WeiboApiResponseResult;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
 
 /**
@@ -38,7 +39,7 @@ public class QWeiboApiService implements WeiboApiService {
 	public void sendLetter(WeiboAppKeys appKeys, String which, WeiboLetter letter) {
 		WeiboApiResponse resp = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent()).execute();
 		if (!resp.isOK()) {
-			logger.warn("send fail.", resp.getErrors());
+			logger.error("send fail.", resp.getErrors());
 		}
 	}
 
@@ -46,16 +47,23 @@ public class QWeiboApiService implements WeiboApiService {
 	@Override
 	public void sendMentionByRelay(WeiboAppKeys appKeys, WeiboMention mention) {
 		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute();
-		List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
+		WeiboApiResponseResult result = resp.getResult();
+		List<Map<String, Object>> infos = (List<Map<String, Object>>) result.on("data").on("info").get();
 		if (infos.isEmpty()) {
+			logger.warn("found empty weibo users to mention.");
+			return;
+		}
 
+		Map<String, String> users = (Map<String, String>) result.on("data").on("user").get();
+		for (String username : users.keySet()) {
+			mention.mention(username);
 		}
 
 		String relayId = (String) infos.get(0).get("id");
 		WeiboApiRequest addRelay = QWeiboApiRequests.newAddRelay(appKeys, relayId, mention.getContent());
 		WeiboApiResponse relayResp = addRelay.execute();
 		if (!relayResp.isOK()) {
-
+			logger.error("send mention fail.");
 		}
 	}
 
@@ -68,7 +76,7 @@ public class QWeiboApiService implements WeiboApiService {
 
 		WeiboApiResponse resp = QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent()).execute();
 		if (!resp.isOK()) {
-
+			logger.error("send mention fail.");
 		}
 
 	}
@@ -145,8 +153,8 @@ public class QWeiboApiService implements WeiboApiService {
 			if (!resp.isOK()) {
 				logger.error(resp.getErrors());
 			}
+			
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
-
 			for (Map<String, Object> info : infos) {
 				String name = (String) info.get("name");
 				name2WeiboUser(appKeys, name, filter, result);
@@ -179,6 +187,7 @@ public class QWeiboApiService implements WeiboApiService {
 			}
 		} catch (Exception e) {
 			// log and ignore
+			logger.error("find who talking about fail.", e);
 		}
 	}
 
@@ -186,19 +195,19 @@ public class QWeiboApiService implements WeiboApiService {
 	private Set<String> findWhoTalkaboutInternal(WeiboAppKeys appKeys, WeiboTalking talking, int page) {
 
 		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute();
-		if (resp.isOK()) {
+		if (!resp.isOK()) {
 			// log and just return
 			return Collections.emptySet();
 		}
 
-		Map<String, String> users = (Map<String, String>) resp.getResult().on("data").on("user");
+		Map<String, String> users = (Map<String, String>) resp.getResult().on("data").on("user").get();
 		return users.keySet();
 	}
 
 	/**
 	 * 
 	 * @author loudyn
-	 *
+	 * 
 	 */
 	abstract class LazyWeiboApiRequestIterator<T> implements Iterator<T> {
 		final WeiboAppKeys appKeys;
@@ -212,7 +221,7 @@ public class QWeiboApiService implements WeiboApiService {
 		}
 
 		@Override
-		public boolean hasNext() {
+		public final boolean hasNext() {
 			if (null != result.peek()) {
 				return true;
 			}
@@ -224,12 +233,12 @@ public class QWeiboApiService implements WeiboApiService {
 		protected abstract void lazyRequest(WeiboAppKeys appKeys, Queue<T> result, BloomFilter<CharSequence> filter, int page);
 
 		@Override
-		public T next() {
+		public final T next() {
 			return result.poll();
 		}
 
 		@Override
-		public void remove() {
+		public final void remove() {
 			throw new UnsupportedOperationException();
 		}
 

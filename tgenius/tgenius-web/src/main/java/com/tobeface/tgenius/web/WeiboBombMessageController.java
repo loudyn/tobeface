@@ -71,7 +71,7 @@ public class WeiboBombMessageController extends ControllerSupport {
 	 * @return
 	 */
 	@RequestMapping(value = "/letter-by-talkabout/", method = RequestMethod.POST)
-	public String publishByTalkabout(WeiboTalking talking, WeiboLetter letter) {
+	public String publishLetterByTalkabout(WeiboTalking talking, WeiboLetter letter) {
 		bombMessageService.publishLetterByTalkabout(talking, letter);
 		return null;
 	}

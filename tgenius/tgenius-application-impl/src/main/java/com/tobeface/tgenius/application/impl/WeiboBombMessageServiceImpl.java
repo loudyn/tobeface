@@ -27,7 +27,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
 @Transactional
 public class WeiboBombMessageServiceImpl implements WeiboBombMessageService {
 
-	private ExecutorService executor = Executors.newFixedThreadPool(20);
+	private ExecutorService executor = Executors.newFixedThreadPool(50);
 	
 	@Autowired
 	private WeiboAppKeysRepository appKeysRepository;

@@ -15,6 +15,7 @@ import com.tobeface.modules.lang.Strings;
  * 
  */
 public final class WeiboMention implements ValueObject<WeiboMention> {
+	
 	private List<String> names = new ArrayList<String>();
 	private String content;
 

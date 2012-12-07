@@ -35,6 +35,11 @@ public interface WeiboAppKeysService {
 	 */
 	void delete(String id);
 
+	/**
+	 * 
+	 * @param page
+	 * @return
+	 */
 	Page<WeiboAppKeys> queryPage(Page<WeiboAppKeys> page);
 
 }

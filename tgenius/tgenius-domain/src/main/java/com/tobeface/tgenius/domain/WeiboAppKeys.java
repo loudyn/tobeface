@@ -14,6 +14,7 @@ import com.tobeface.modules.helper.JsonHelper;
  * 
  */
 public class WeiboAppKeys implements DomainObject<WeiboAppKeys>, Serializable {
+	
 	private static final long serialVersionUID = 1L;
 
 	private String authorizationUrl;

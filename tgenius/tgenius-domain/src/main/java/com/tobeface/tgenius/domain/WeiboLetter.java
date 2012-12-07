@@ -10,7 +10,7 @@ import com.tobeface.modules.domain.ValueObject;
  * 
  */
 public final class WeiboLetter implements ValueObject<WeiboLetter> {
-
+	
 	private String content;
 
 	public String getContent() {

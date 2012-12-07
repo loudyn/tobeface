@@ -18,6 +18,12 @@
 			date.setTime(current);
 			$("#current").empty().append("当前时间：" + date.toLocaleString());
 		});
+		
+		$.ajax({
+			url : "${ctx}/weibo-bomb-msg/mention-by-talkabout/",
+			type : "POST",
+			data : {"keyword":"iphone5","content" : "秋冬来临，请多加衣裳"}
+		});
 	});
 </script>
 </head>

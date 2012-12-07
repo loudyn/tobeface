@@ -91,7 +91,7 @@ public class WeiboTalking implements ValueObject<WeiboTalking> {
 	}
 
 	public boolean hasAvaliableTalkingTime() {
-		if (null == getTalkingTime()) {
+		if (null != getTalkingTime()) {
 			return getTalkingTime().isAvaliable();
 		}
 		return false;

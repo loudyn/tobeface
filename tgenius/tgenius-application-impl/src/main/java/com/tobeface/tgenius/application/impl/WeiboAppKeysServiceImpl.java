@@ -32,7 +32,7 @@ public class WeiboAppKeysServiceImpl implements WeiboAppKeysService {
 	public void update(WeiboAppKeys entity) {
 		appKeysRepository.update(entity);
 	}
-
+	
 	public void delete(String id) {
 		appKeysRepository.delete(id);
 	}

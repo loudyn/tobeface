@@ -23,7 +23,7 @@ public interface WeiboUserService {
 	 * @return
 	 */
 	WeiboUser queryUniqueByName(String name);
-
+	
 	/**
 	 * 
 	 * @param which

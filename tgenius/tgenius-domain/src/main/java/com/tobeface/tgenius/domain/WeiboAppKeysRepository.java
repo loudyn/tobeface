@@ -39,7 +39,7 @@ public interface WeiboAppKeysRepository {
 	 * @param id
 	 */
 	void delete(String id);
-
+	
 	/**
 	 * 
 	 * @param page

@@ -92,6 +92,7 @@ final class WeiboApiRequestPerformer {
 			entity = resp.getEntity();
 			return new WeiboApiResponse(EntityUtils.toString(entity));
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw Lang.uncheck(e);
 		} finally {
 			EntityUtils.consumeQuietly(entity);
@@ -110,7 +111,7 @@ final class WeiboApiRequestPerformer {
 				return new HttpGet(req.getUrl());
 			}
 
-			HttpPost post = new HttpPost();
+			HttpPost post = new HttpPost(req.getUrl());
 			List<NameValuePair> postParams = new ArrayList<NameValuePair>();
 			for (Entry<String, Object> entry : req.getParams().entrySet()) {
 				postParams.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));

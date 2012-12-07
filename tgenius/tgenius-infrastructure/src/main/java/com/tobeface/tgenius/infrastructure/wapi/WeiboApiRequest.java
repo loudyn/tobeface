@@ -14,6 +14,7 @@ import com.tobeface.modules.helper.CodeHelper;
  * 
  */
 public final class WeiboApiRequest {
+	
 	private final String url;
 	private final WeiboApiRequestVerb verb;
 

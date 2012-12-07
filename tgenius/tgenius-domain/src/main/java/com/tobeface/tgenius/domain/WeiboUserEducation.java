@@ -11,6 +11,7 @@ import com.tobeface.modules.domain.ValueObject;
  * 
  */
 public class WeiboUserEducation implements ValueObject<WeiboUserEducation> {
+	
 	@JsonProperty("level")
 	private String level;
 	@JsonProperty("year")
