@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import com.google.common.collect.ImmutableMap;
 import com.tobeface.modules.helper.CodeHelper;
+import com.tobeface.modules.lang.Preconditions;
 
 /**
  * 
@@ -14,7 +15,7 @@ import com.tobeface.modules.helper.CodeHelper;
  * 
  */
 public final class WeiboApiRequest {
-	
+
 	private final String url;
 	private final WeiboApiRequestVerb verb;
 
@@ -27,6 +28,8 @@ public final class WeiboApiRequest {
 	 * @param verb
 	 */
 	public WeiboApiRequest(String url, WeiboApiRequestVerb verb) {
+		Preconditions.hasText(url);
+		Preconditions.notNull(verb);
 		this.url = url;
 		this.verb = verb;
 	}
@@ -105,6 +108,11 @@ public final class WeiboApiRequest {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param accessToken
+	 * @return
+	 */
 	public WeiboApiRequest accessToken(String accessToken) {
 		return accessToken("access_token", accessToken);
 	}
@@ -127,6 +135,9 @@ public final class WeiboApiRequest {
 	 * @return
 	 */
 	public WeiboApiRequest param(String paramName, Object paramValue) {
+		Preconditions.hasText(paramName);
+		Preconditions.notNull(paramValue);
+		
 		if (isGetVerb()) {
 			queryParams.put(paramName, paramValue);
 			return this;
@@ -142,6 +153,8 @@ public final class WeiboApiRequest {
 	 * @return
 	 */
 	public WeiboApiRequest params(Map<String, Object> params) {
+		Preconditions.notNull(params);
+		
 		if (isGetVerb()) {
 			queryParams.putAll(params);
 			return this;

@@ -56,10 +56,10 @@ public class WeiboUserCompany implements ValueObject<WeiboUserCompany> {
 	@Override
 	public boolean sameValueAs(WeiboUserCompany other) {
 		return new EqualsBuilder().append(getBeginYear(), other.getBeginYear())
-				.append(getEndYear(), other.getEndYear())
-				.append(getName(), other.getName())
-				.append(getDepartmentName(), other.getDepartmentName())
-				.isEquals();
+									.append(getEndYear(), other.getEndYear())
+									.append(getName(), other.getName())
+									.append(getDepartmentName(), other.getDepartmentName())
+									.isEquals();
 	}
 
 }

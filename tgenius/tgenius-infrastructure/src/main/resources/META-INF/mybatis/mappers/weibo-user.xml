@@ -41,14 +41,14 @@
 
 <insert id="save" keyProperty="name" >
 	insert into 
-		weibo_user(name,nickname,location,homepage,careercode,sex,birth_year,fans_count,is_vip,verify_info,is_enterprise,is_realname,json,status) 
-	values(#{entity.name},#{entity.nickname},#{entity.location},#{entity.homepage},#{entity.careercode},
+		weibo_user(name,nickname,location,homepage,careercode,careername,sex,birth_year,fans_count,is_vip,verify_info,is_enterprise,is_realname,json,status) 
+	values(#{entity.name},#{entity.nickname},#{entity.location},#{entity.homepage},#{entity.careercode},(select name from weibo_career where id=#{entity.careercode}),
 			#{entity.sex},#{entity.birthYear},#{entity.fansCount},#{entity.isVip},#{entity.verifyInfo},#{entity.isEnterprise},#{entity.isRealname},#{json},0)				
 </insert>
 
 <update id="update">
 	update weibo_user 
-	set nickname=#{entity.nickname},location=#{entity.location},homepage=#{entity.homepage},careercode=#{entity.careercode},
+	set nickname=#{entity.nickname},location=#{entity.location},homepage=#{entity.homepage},careercode=#{entity.careercode},careername=(select name from weibo_career where id=#{entity.careercode}),
 		sex=#{entity.sex},birth_year=#{entity.birthYear},fans_count=#{entity.fansCount},is_vip=#{entity.isVip},verify_info=#{entity.verifyInfo},
 		is_enterprise=#{entity.isEnterprise},is_realname=#{entity.isRealname},json=#{json},status=0 where name=#{entity.name}
 </update>
@@ -68,7 +68,7 @@
 
 <select id="query" resultMap="weiboUserResult">
 	<include refid="commonSelect"/>
-	where status=1 
+	where self.sex in (0,1,2) and self.is_vip in (0, 1) and status=1 order by self.fans_count desc 
 </select>
 
 <select id="queryPage" resultMap="weiboUserResult">

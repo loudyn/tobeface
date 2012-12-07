@@ -30,6 +30,7 @@ import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
 
 import com.tobeface.modules.lang.Lang;
+import com.tobeface.modules.lang.Preconditions;
 
 /**
  * 
@@ -79,6 +80,7 @@ final class WeiboApiRequestPerformer {
 	 * @return
 	 */
 	static WeiboApiResponse perform(WeiboApiRequest req) {
+		Preconditions.notNull(req);
 
 		HttpUriRequest httpReq = WeiboApiRequestPerformer.transform(req);
 		HttpEntity entity = null;

@@ -1,16 +1,14 @@
 package com.tobeface.tgenius.infrastructure.persist;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 
-import com.tobeface.modules.domain.Page;
 import com.tobeface.modules.helper.JsonHelper;
 import com.tobeface.modules.lang.Preconditions;
 import com.tobeface.modules.orm.DataAccessException;
+import com.tobeface.modules.orm.mybatis.MybatisRepositorySupport;
 import com.tobeface.tgenius.domain.WeiboUser;
 import com.tobeface.tgenius.domain.WeiboUserRepository;
 
@@ -20,9 +18,7 @@ import com.tobeface.tgenius.domain.WeiboUserRepository;
  * 
  */
 @Repository
-public class MybatisWeiboUserRepository extends SqlSessionDaoSupport implements WeiboUserRepository {
-
-	private static final String NAMESPACE = WeiboUser.class.getName();
+public class MybatisWeiboUserRepository extends MybatisRepositorySupport<String, WeiboUser> implements WeiboUserRepository {
 
 	@Override
 	public void save(WeiboUser entity) {
@@ -33,21 +29,7 @@ public class MybatisWeiboUserRepository extends SqlSessionDaoSupport implements 
 			paramMap.put("entity", entity);
 			String entityAsString = JsonHelper.toJsonString(entity);
 			paramMap.put("json", entityAsString);
-			getSqlSession().insert(NAMESPACE.concat(".save"), paramMap);
-		} catch (Exception e) {
-			throw new DataAccessException(e);
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public Page<WeiboUser> queryPage(Page<WeiboUser> page) {
-		Preconditions.notNull(page);
-		try {
-
-			List<WeiboUser> result = getSqlSession().selectList(NAMESPACE.concat(".queryPage"), page);
-			page.setResult(result);
-			return page;
+			getSqlSession().insert(getNamespace().concat(".save"), paramMap);
 		} catch (Exception e) {
 			throw new DataAccessException(e);
 		}
@@ -59,7 +41,8 @@ public class MybatisWeiboUserRepository extends SqlSessionDaoSupport implements 
 		Preconditions.hasText(name);
 		try {
 
-			Map<String, String> jsonMap = (Map<String, String>) getSqlSession().selectOne(NAMESPACE.concat(".queryUniqueByName"), name);
+			Map<String, String> jsonMap = (Map<String, String>) getSqlSession()
+					.selectOne(getNamespace().concat(".queryUniqueByName"), name);
 			return JsonHelper.fromJsonString(jsonMap.get("json"), WeiboUser.class);
 		} catch (Exception e) {
 			throw new DataAccessException(e);
@@ -71,7 +54,7 @@ public class MybatisWeiboUserRepository extends SqlSessionDaoSupport implements 
 		Preconditions.hasText(name);
 		try {
 
-			getSqlSession().delete(NAMESPACE.concat(".deleteByName"), name);
+			getSqlSession().delete(getNamespace().concat(".deleteByName"), name);
 		} catch (Exception e) {
 			throw new DataAccessException(e);
 		}
@@ -81,7 +64,7 @@ public class MybatisWeiboUserRepository extends SqlSessionDaoSupport implements 
 	public boolean existsByName(String name) {
 		try {
 
-			Object result = getSqlSession().selectOne(NAMESPACE.concat(".existsByName"), name);
+			Object result = getSqlSession().selectOne(getNamespace().concat(".existsByName"), name);
 			return null != result;
 		} catch (Exception e) {
 			throw new DataAccessException(e);
@@ -97,7 +80,7 @@ public class MybatisWeiboUserRepository extends SqlSessionDaoSupport implements 
 			paramMap.put("entity", entity);
 			String entityAsString = JsonHelper.toJsonString(entity);
 			paramMap.put("json", entityAsString);
-			getSqlSession().update(NAMESPACE.concat(".update"), paramMap);
+			getSqlSession().update(getNamespace().concat(".update"), paramMap);
 		} catch (Exception e) {
 			throw new DataAccessException(e);
 		}

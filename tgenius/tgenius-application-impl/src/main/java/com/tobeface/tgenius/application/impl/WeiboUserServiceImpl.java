@@ -1,5 +1,7 @@
 package com.tobeface.tgenius.application.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,11 @@ public class WeiboUserServiceImpl implements WeiboUserService {
 	@Override
 	public Page<WeiboUser> queryPage(Page<WeiboUser> page) {
 		return weiboUserRepository.queryPage(page);
+	}
+
+	@Override
+	public List<WeiboUser> query(Object object) {
+		return weiboUserRepository.query(object);
 	}
 
 	@Override

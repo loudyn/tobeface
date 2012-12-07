@@ -22,7 +22,7 @@
 		$.ajax({
 			url : "${ctx}/dig-weibo-user/by-tags/",
 			type : "POST",
-			data : {"tags" : "冷艳 "}
+			data : {"tags" : "夜猫子"}
 		});
 	});
 </script>

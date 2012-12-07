@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.Map;
 
 import com.tobeface.modules.helper.JsonHelper;
+import com.tobeface.modules.lang.Preconditions;
 
 /**
  * 
@@ -17,6 +18,7 @@ public class WeiboApiResponse {
 
 	@SuppressWarnings("unchecked")
 	public WeiboApiResponse(String resp) {
+		Preconditions.hasText(resp);
 		this.mapResult = JsonHelper.fromJsonString(resp, Map.class);
 	}
 
@@ -51,16 +53,8 @@ public class WeiboApiResponse {
 		 * @return
 		 */
 		public WeiboApiResponseResult on(String action) {
+			Preconditions.hasText(action);
 			actions.offerLast(action);
-			return this;
-		}
-
-		/**
-		 * 
-		 * @return
-		 */
-		public WeiboApiResponseResult back() {
-			actions.pollLast();
 			return this;
 		}
 
@@ -75,7 +69,7 @@ public class WeiboApiResponse {
 				}
 
 				Map<String, Object> mapResult = (Map<String, Object>) objResult;
-				if (!mapResult.containsKey(action)) {
+				if (null == mapResult || !mapResult.containsKey(action)) {
 					throw new UnsupportedOperationException("Bad action[" + action + "]");
 				}
 

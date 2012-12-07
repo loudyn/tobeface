@@ -22,7 +22,7 @@
 		$.ajax({
 			url : "${ctx}/weibo-bomb-msg/mention-by-talkabout/",
 			type : "POST",
-			data : {"keyword":"iphone5","content" : "秋冬来临，请多加衣裳"}
+			data : {"keyword":"十全大补","content" : "秋冬来临，请多加衣裳"}
 		});
 	});
 </script>

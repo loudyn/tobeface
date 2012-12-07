@@ -1,5 +1,7 @@
 package com.tobeface.tgenius.application;
 
+import java.util.List;
+
 import com.tobeface.modules.domain.Page;
 import com.tobeface.tgenius.domain.WeiboUser;
 
@@ -19,6 +21,12 @@ public interface WeiboUserService {
 
 	/**
 	 * 
+	 * @param object
+	 * @return
+	 */
+	List<WeiboUser> query(Object object);
+	/**
+	 * 
 	 * @param name
 	 * @return
 	 */
@@ -29,4 +37,5 @@ public interface WeiboUserService {
 	 * @param which
 	 */
 	void deleteByName(String which);
+
 }

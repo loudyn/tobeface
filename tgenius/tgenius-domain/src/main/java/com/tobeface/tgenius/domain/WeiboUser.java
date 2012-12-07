@@ -10,6 +10,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 
 import com.tobeface.modules.domain.DomainObject;
 import com.tobeface.modules.helper.JsonHelper;
+import com.tobeface.modules.table.annotations.TableField;
 
 /**
  * 
@@ -26,34 +27,47 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 	private List<WeiboUserEducation> educations = new ArrayList<WeiboUserEducation>();
 
 	@JsonProperty("name")
+	@TableField(columnIndex = 0)
 	private String name;
 	@JsonProperty("nick")
+	@TableField(columnIndex = 1)
 	private String nickname;
 	@JsonProperty("location")
+	@TableField(columnIndex = 2)
 	private String location;
 	@JsonProperty("homepage")
+	@TableField(columnIndex = 3)
 	private String homepage;
 	@JsonProperty("introduction")
+	@TableField(columnIndex = 4)
 	private String intro;
 
 	@JsonProperty("industry_code")
 	private String careercode;
+	@TableField(columnIndex = 5)
 	private String careername;
 
 	@JsonProperty("verifyinfo")
+	@TableField(columnIndex = 6)
 	private String verifyInfo;
 
 	@JsonProperty("sex")
+	@TableField(columnIndex = 7)
 	private int sex;
 	@JsonProperty("birth_year")
+	@TableField(columnIndex = 8)
 	private int birthYear;
 	@JsonProperty("fansnum")
+	@TableField(columnIndex = 9)
 	private int fansCount;
 	@JsonProperty("isvip")
+	@TableField(columnIndex = 10)
 	private boolean isVip;
 	@JsonProperty("isent")
+	@TableField(columnIndex = 11)
 	private boolean isEnterprise;
 	@JsonProperty("isrealname")
+	@TableField(columnIndex = 12)
 	private boolean isRealname;
 
 	public List<WeiboUserCompany> getCompanies() {

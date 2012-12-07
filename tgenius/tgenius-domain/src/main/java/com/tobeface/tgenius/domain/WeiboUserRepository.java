@@ -1,5 +1,7 @@
 package com.tobeface.tgenius.domain;
 
+import java.util.List;
+
 import com.tobeface.modules.domain.Page;
 
 /**
@@ -15,6 +17,13 @@ public interface WeiboUserRepository {
 	 * @return
 	 */
 	Page<WeiboUser> queryPage(Page<WeiboUser> page);
+
+	/**
+	 * 
+	 * @param object
+	 * @return
+	 */
+	List<WeiboUser> query(Object object);
 
 	/**
 	 * 

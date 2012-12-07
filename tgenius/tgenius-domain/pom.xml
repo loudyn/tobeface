@@ -22,6 +22,10 @@
 			<artifactId>modules-helper</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.tobeface</groupId>
+			<artifactId>modules-table</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.2.1</version>

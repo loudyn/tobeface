@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.tobeface.modules.helper.JsonHelper;
+import com.tobeface.modules.lang.Preconditions;
 import com.tobeface.tgenius.domain.WeiboAppKeys;
 import com.tobeface.tgenius.domain.WeiboLetter;
 import com.tobeface.tgenius.domain.WeiboMention;
@@ -36,16 +37,27 @@ public class QWeiboApiService implements WeiboApiService {
 
 	private Logger logger = LoggerFactory.getLogger(QWeiboApiService.class);
 
+	@Override
 	public void sendLetter(WeiboAppKeys appKeys, String which, WeiboLetter letter) {
+		checkNotNull(appKeys, which, letter);
+
 		WeiboApiResponse resp = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent()).execute();
 		if (!resp.isOK()) {
 			logger.error("send fail.", resp.getErrors());
 		}
 	}
 
+	private void checkNotNull(Object... objs) {
+		for (Object obj : objs) {
+			Preconditions.notNull(obj);
+		}
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void sendMentionByRelay(WeiboAppKeys appKeys, WeiboMention mention) {
+		checkNotNull(appKeys, mention);
+
 		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute();
 		WeiboApiResponseResult result = resp.getResult();
 		List<Map<String, Object>> infos = (List<Map<String, Object>>) result.on("data").on("info").get();
@@ -69,6 +81,8 @@ public class QWeiboApiService implements WeiboApiService {
 
 	@Override
 	public void sendMentionByTalking(WeiboAppKeys appKeys, WeiboTalking talking, WeiboMention mention) {
+		checkNotNull(appKeys, talking, mention);
+
 		Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, 1);
 		for (String username : usernames) {
 			mention.mention(username);
@@ -83,6 +97,8 @@ public class QWeiboApiService implements WeiboApiService {
 
 	@Override
 	public Iterator<WeiboUser> findWhoTagLikes(final WeiboAppKeys appKeys, final String tags) {
+		checkNotNull(appKeys, tags);
+
 		return new LazyWeiboApiRequestIterator<WeiboUser>(appKeys) {
 
 			@Override
@@ -93,7 +109,10 @@ public class QWeiboApiService implements WeiboApiService {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void computeNextTagLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, BloomFilter<CharSequence> filter, int page, String tags) {
+	protected void computeNextTagLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, 
+										BloomFilter<CharSequence> filter, int page,
+										String tags) {
+		
 		try {
 
 			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute();
@@ -136,6 +155,8 @@ public class QWeiboApiService implements WeiboApiService {
 
 	@Override
 	public Iterator<WeiboUser> findWhoKeywordLikes(final WeiboAppKeys appKeys, final String keyword) {
+		checkNotNull(appKeys, keyword);
+
 		return new LazyWeiboApiRequestIterator<WeiboUser>(appKeys) {
 
 			@Override
@@ -146,14 +167,17 @@ public class QWeiboApiService implements WeiboApiService {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void computeNextKeywordLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, BloomFilter<CharSequence> filter, int page, String keyword) {
+	protected void computeNextKeywordLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, 
+											BloomFilter<CharSequence> filter, int page,
+											String keyword) {
+		
 		try {
 
 			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute();
 			if (!resp.isOK()) {
 				logger.error(resp.getErrors());
 			}
-			
+
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 			for (Map<String, Object> info : infos) {
 				String name = (String) info.get("name");
@@ -164,7 +188,9 @@ public class QWeiboApiService implements WeiboApiService {
 		}
 	}
 
+	@Override
 	public Iterator<String> findWhoTalkabout(final WeiboAppKeys appKeys, final WeiboTalking talking) {
+		checkNotNull(appKeys, talking);
 		return new LazyWeiboApiRequestIterator<String>(appKeys) {
 
 			@Override
@@ -174,9 +200,12 @@ public class QWeiboApiService implements WeiboApiService {
 		};
 	}
 
-	protected void computeNextTalkabout(WeiboAppKeys appKeys, Queue<String> result, BloomFilter<CharSequence> filter, int page, WeiboTalking talking) {
+	protected void computeNextTalkabout(WeiboAppKeys appKeys, Queue<String> result, 
+										BloomFilter<CharSequence> filter, int page,
+										WeiboTalking talking) {
 
 		try {
+			
 			Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, page);
 			for (String username : usernames) {
 				if (filter.mightContain(username)) {

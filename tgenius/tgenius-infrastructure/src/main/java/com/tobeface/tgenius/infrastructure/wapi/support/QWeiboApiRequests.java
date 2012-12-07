@@ -6,7 +6,6 @@ import com.tobeface.modules.lang.Preconditions;
 import com.tobeface.tgenius.domain.WeiboAppKeys;
 import com.tobeface.tgenius.domain.WeiboTalking;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestIpGenerator;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest.WeiboApiRequestVerb;
 
 /**
@@ -34,9 +33,13 @@ final class QWeiboApiRequests {
 	 */
 	static WeiboApiRequest newAddTwitter(WeiboAppKeys appKeys, String content) {
 		WeiboApiRequest req = new WeiboApiRequest(T_ADD, WeiboApiRequestVerb.POST);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
-		req.param("format", "json").param("content", content).param("clientip", WeiboApiRequestIpGenerator.next());
+		initApiKeys(appKeys, req);
+		req.param("format", "json").param("content", content).param("clientip", QWeiboApiRequestIpGenerator.next());
 		return req;
+	}
+
+	private static void initApiKeys(WeiboAppKeys appKeys, WeiboApiRequest req) {
+		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
 	}
 
 	/**
@@ -51,9 +54,9 @@ final class QWeiboApiRequests {
 		Preconditions.hasText(which);
 
 		WeiboApiRequest req = new WeiboApiRequest(PRIVATE_ADD, WeiboApiRequestVerb.POST);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("content", content).param("name", which);
-		req.param("clientip", WeiboApiRequestIpGenerator.next()).param("contentflag", "1");
+		req.param("clientip", QWeiboApiRequestIpGenerator.next()).param("contentflag", "1");
 		return req;
 	}
 
@@ -69,9 +72,9 @@ final class QWeiboApiRequests {
 		Preconditions.hasText(relayId);
 
 		WeiboApiRequest req = new WeiboApiRequest(RE_ADD, WeiboApiRequestVerb.POST);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("reid", relayId);
-		req.param("content", content).param("clientip", WeiboApiRequestIpGenerator.next());
+		req.param("content", content).param("clientip", QWeiboApiRequestIpGenerator.next());
 		return req;
 	}
 
@@ -85,6 +88,7 @@ final class QWeiboApiRequests {
 
 		WeiboApiRequest req = new WeiboApiRequest(TRENDS_T, WeiboApiRequestVerb.GET);
 		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("reqnum", 5);
 		req.param("pos", createRandomPos()).param("type", createRandomType());
 		return req;
@@ -113,7 +117,7 @@ final class QWeiboApiRequests {
 		Preconditions.hasText(name);
 
 		WeiboApiRequest req = new WeiboApiRequest(OTHER_INFO, WeiboApiRequestVerb.GET);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("name", name);
 		return req;
 	}
@@ -131,12 +135,14 @@ final class QWeiboApiRequests {
 		Preconditions.isTrue(page > 0);
 
 		WeiboApiRequest req = new WeiboApiRequest(SEARCH_T, WeiboApiRequestVerb.GET);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("keyword", talking.getKeyword()).param("pageSize", 20);
 		req.param("page", page).param("contenttype", 0).param("sorttype", 0).param("msgtype", 0).param("searchtype", 0);
 
 		if (talking.hasAvaliableLocation()) {
-			req.param("longitude", talking.getLocLongitude()).param("latitude", talking.getLocLatitude()).param("radius", talking.getRadius());
+			req.param("longitude", talking.getLocLongitude());
+			req.param("latitude", talking.getLocLatitude());
+			req.param("radius", talking.getRadius());
 		}
 
 		if (talking.hasAvaliableTalkingTime()) {
@@ -158,7 +164,7 @@ final class QWeiboApiRequests {
 		Preconditions.isTrue(page > 0);
 
 		WeiboApiRequest req = new WeiboApiRequest(SEARCH_U, WeiboApiRequestVerb.GET);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("keyword", keyword);
 		req.param("pagesize", 15).param("page", page);
 		return req;
@@ -177,7 +183,7 @@ final class QWeiboApiRequests {
 		Preconditions.isTrue(page > 0);
 
 		WeiboApiRequest req = new WeiboApiRequest(SEARCH_U_BY_TAGS, WeiboApiRequestVerb.GET);
-		req.appKey(appKeys.getApiKey()).accessToken(appKeys.getAccessToken()).params(appKeys.getOtherParamsAsMap());
+		initApiKeys(appKeys, req);
 		req.param("format", "json").param("keyword", tags);
 		req.param("pagesize", 15).param("page", page);
 		return req;
