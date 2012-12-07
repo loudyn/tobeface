@@ -122,23 +122,23 @@ public class Page<T> implements Serializable {
 		return ((pageNo - 1) * pageSize) + 1;
 	}
 
-	public boolean hasNext() {
+	public boolean getIsHasNext() {
 		return (pageNo + 1 <= getTotalPages());
 	}
 
 	public int getNextPage() {
-		if (hasNext()) {
+		if (getIsHasNext()) {
 			return pageNo + 1;
 		}
 		return pageNo;
 	}
 
-	public boolean hasPre() {
+	public boolean getIsHasPre() {
 		return (pageNo - 1 >= 1);
 	}
 
 	public int getPrePage() {
-		if (hasPre()) {
+		if (getIsHasPre()) {
 			return pageNo - 1;
 		}
 		return pageNo;

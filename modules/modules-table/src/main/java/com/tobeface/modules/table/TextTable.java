@@ -79,7 +79,7 @@ class TextTable implements Table {
 
 				});
 
-				String line = Strings.join(values, getSplitter()).concat(Lang.isWindowOS() ? "\r\n" : "\n");
+				String line = Strings.join(values, getSplitter()).concat(System.getProperty("line.separator"));
 				Files.appendTo(workspace, line, "UTF-8");
 			}
 		};
