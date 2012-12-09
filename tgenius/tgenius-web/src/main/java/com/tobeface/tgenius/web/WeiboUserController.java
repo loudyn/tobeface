@@ -48,8 +48,13 @@ public class WeiboUserController extends ControllerSupport {
 		return listView();
 	}
 
-	@RequestMapping(value = "/dump-xls/", method = RequestMethod.GET)
-	public void dumpAsCsv(HttpServletResponse resp) {
+	@RequestMapping(value = "/dump/", method = RequestMethod.GET)
+	public String dump() {
+		return getViewPackage().concat("/dump");
+	}
+
+	@RequestMapping(value = "/dump-xls/", method = RequestMethod.POST)
+	public void dumpXls(HttpServletResponse resp) {
 		try {
 
 			Webs.prepareDownload(resp, "weibo-user.xls", ContentType.EXCEL);
@@ -57,10 +62,10 @@ public class WeiboUserController extends ControllerSupport {
 			List<WeiboUser> entities = weiboUserService.query(new Object());
 			File temp = File.createTempFile("dump", ".xls");
 			String templatename = CodeHelper.urlDecode(
-															getClass().getResource("/META-INF/xls/template.xls").getFile(),
-															"UTF-8"
-														);
-			
+														getClass().getResource("/META-INF/xls/template.xls").getFile(),
+														"UTF-8"
+													);
+
 			File template = new File(templatename);
 			Table xls = Tables.newXls(temp, template);
 			xls.insert(entities);

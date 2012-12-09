@@ -46,7 +46,6 @@
 <shiro:hasPermission name="weibo-user:delete">
 <input class="tjbtn" id="del" type="button" value="删除" />
 </shiro:hasPermission>
-<input class="tjbtn" id="dump" type="button" value="导出" />
 <span class="dist">名称：</span><input name="params[name]" value="${page.params.name}" type="text" /><input class="tjbtn" type="submit" value="提交" />
 </div>
 <p>${message.text }</p>

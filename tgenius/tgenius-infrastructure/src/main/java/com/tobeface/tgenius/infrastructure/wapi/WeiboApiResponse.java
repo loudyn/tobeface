@@ -12,7 +12,7 @@ import com.tobeface.modules.lang.Preconditions;
  * @author loudyn
  * 
  */
-public class WeiboApiResponse {
+public final class WeiboApiResponse {
 
 	private final Map<String, Object> mapResult;
 
@@ -22,14 +22,10 @@ public class WeiboApiResponse {
 		this.mapResult = JsonHelper.fromJsonString(resp, Map.class);
 	}
 
-	public boolean isOK() {
-		return ((Integer) mapResult.get("ret")) == 0;
-	}
-
-	public String getErrors() {
-		return "errorcode[" + mapResult.get("errcode") + "]-errormsg[" + mapResult.get("msg") + "]";
-	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public WeiboApiResponseResult getResult() {
 		return new WeiboApiResponseResult(mapResult);
 	}
@@ -69,7 +65,7 @@ public class WeiboApiResponse {
 				}
 
 				Map<String, Object> mapResult = (Map<String, Object>) objResult;
-				if (null == mapResult || !mapResult.containsKey(action)) {
+				if (isUnacceptableAction(mapResult, action)) {
 					throw new UnsupportedOperationException("Bad action[" + action + "]");
 				}
 
@@ -79,5 +75,8 @@ public class WeiboApiResponse {
 			return objResult;
 		}
 
+		private boolean isUnacceptableAction(Map<String, Object> mapResult, String action) {
+			return null == mapResult || !mapResult.containsKey(action);
+		}
 	}
 }

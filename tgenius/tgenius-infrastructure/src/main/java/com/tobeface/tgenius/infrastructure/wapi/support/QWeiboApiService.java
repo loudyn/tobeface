@@ -1,16 +1,18 @@
 package com.tobeface.tgenius.infrastructure.wapi.support;
 
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.google.common.hash.BloomFilter;
@@ -22,10 +24,13 @@ import com.tobeface.tgenius.domain.WeiboLetter;
 import com.tobeface.tgenius.domain.WeiboMention;
 import com.tobeface.tgenius.domain.WeiboTalking;
 import com.tobeface.tgenius.domain.WeiboUser;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestPolicy;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse.WeiboApiResponseResult;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
+import com.tobeface.tgenius.infrastructure.wapi.policy.WeiboApiRequestPolicies;
 
 /**
  * 
@@ -37,14 +42,26 @@ public class QWeiboApiService implements WeiboApiService {
 
 	private Logger logger = LoggerFactory.getLogger(QWeiboApiService.class);
 
+	@Autowired
+	@Qualifier("qweibo-api-exception-explorer")
+	private WeiboApiExceptionExplorer exceptionExplorer;
+
+	protected Logger getLogger() {
+		return logger;
+	}
+
+	protected WeiboApiExceptionExplorer getExceptionExplorer() {
+		return exceptionExplorer;
+	}
+
 	@Override
 	public void sendLetter(WeiboAppKeys appKeys, String which, WeiboLetter letter) {
 		checkNotNull(appKeys, which, letter);
 
-		WeiboApiResponse resp = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent()).execute();
-		if (!resp.isOK()) {
-			logger.error("send fail.", resp.getErrors());
-		}
+		WeiboApiRequest req = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent());
+		req.execute(
+						WeiboApiRequestPolicies.newFastFail(getExceptionExplorer())
+		);
 	}
 
 	private void checkNotNull(Object... objs) {
@@ -58,7 +75,9 @@ public class QWeiboApiService implements WeiboApiService {
 	public void sendMentionByRelay(WeiboAppKeys appKeys, WeiboMention mention) {
 		checkNotNull(appKeys, mention);
 
-		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute();
+		WeiboApiRequestPolicy policy = WeiboApiRequestPolicies.newFastFail(getExceptionExplorer());
+		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute(policy);
+
 		WeiboApiResponseResult result = resp.getResult();
 		List<Map<String, Object>> infos = (List<Map<String, Object>>) result.on("data").on("info").get();
 		if (infos.isEmpty()) {
@@ -66,33 +85,34 @@ public class QWeiboApiService implements WeiboApiService {
 			return;
 		}
 
+		String relayId = (String) infos.get(0).get("id");
 		Map<String, String> users = (Map<String, String>) result.on("data").on("user").get();
 		for (String username : users.keySet()) {
 			mention.mention(username);
 		}
 
-		String relayId = (String) infos.get(0).get("id");
 		WeiboApiRequest addRelay = QWeiboApiRequests.newAddRelay(appKeys, relayId, mention.getContent());
-		WeiboApiResponse relayResp = addRelay.execute();
-		if (!relayResp.isOK()) {
-			logger.error("send mention fail.");
-		}
+		addRelay.execute(policy);
 	}
 
 	@Override
 	public void sendMentionByTalking(WeiboAppKeys appKeys, WeiboTalking talking, WeiboMention mention) {
 		checkNotNull(appKeys, talking, mention);
 
-		Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, 1);
+		// random on page 1~10
+		Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, 1 + new Random().nextInt(10));
+		if (usernames.isEmpty()) {
+			logger.warn("found empty weibo users to mention.");
+			return;
+		}
+
 		for (String username : usernames) {
 			mention.mention(username);
 		}
 
-		WeiboApiResponse resp = QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent()).execute();
-		if (!resp.isOK()) {
-			logger.error("send mention fail.");
-		}
-
+		QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent()).execute(
+				WeiboApiRequestPolicies.newFastFail(getExceptionExplorer())
+		);
 	}
 
 	@Override
@@ -109,16 +129,15 @@ public class QWeiboApiService implements WeiboApiService {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void computeNextTagLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, 
+	protected void computeNextTagLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result,
 										BloomFilter<CharSequence> filter, int page,
 										String tags) {
-		
+
 		try {
 
-			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute();
-			if (!resp.isOK()) {
-				logger.error(resp.getErrors());
-			}
+			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute(
+					WeiboApiRequestPolicies.newSleepAndRetry(getExceptionExplorer(), 10 * 60 * 1000)
+			);
 
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 			for (Map<String, Object> info : infos) {
@@ -126,28 +145,31 @@ public class QWeiboApiService implements WeiboApiService {
 				name2WeiboUser(appKeys, name, filter, result);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			getLogger().warn("compute next tag like fail,{}", e.getMessage());
 		}
 	}
 
-	private void name2WeiboUser(WeiboAppKeys appKeys, String name, BloomFilter<CharSequence> bloom, Queue<WeiboUser> those) {
-		if (bloom.mightContain(name)) {
+	private void name2WeiboUser(WeiboAppKeys appKeys, String name, BloomFilter<CharSequence> filter, Queue<WeiboUser> result) {
+		if (filter.mightContain(name)) {
 			return;
 		}
 
-		WeiboUser entity = findWeiboUserByName(appKeys, name);
-		if (null != entity) {
-			those.add(entity);
-			bloom.put(name);
+		try {
+
+			WeiboUser entity = findWeiboUserByName(appKeys, name);
+			if (null != entity) {
+				result.add(entity);
+				filter.put(name);
+			}
+		} catch (Exception ignore) {
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private WeiboUser findWeiboUserByName(WeiboAppKeys appKeys, String name) {
-		WeiboApiResponse resp = QWeiboApiRequests.newOtherInfo(appKeys, name).execute();
-		if (!resp.isOK()) {
-			return null;
-		}
+		WeiboApiResponse resp = QWeiboApiRequests.newOtherInfo(appKeys, name).execute(
+				WeiboApiRequestPolicies.newFastFail(getExceptionExplorer())
+		);
 
 		Map<String, Object> data = (Map<String, Object>) resp.getResult().on("data").get();
 		return JsonHelper.newfor(data, WeiboUser.class);
@@ -167,16 +189,15 @@ public class QWeiboApiService implements WeiboApiService {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void computeNextKeywordLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result, 
+	protected void computeNextKeywordLikes(WeiboAppKeys appKeys, Queue<WeiboUser> result,
 											BloomFilter<CharSequence> filter, int page,
 											String keyword) {
-		
+
 		try {
 
-			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute();
-			if (!resp.isOK()) {
-				logger.error(resp.getErrors());
-			}
+			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute(
+					WeiboApiRequestPolicies.newSleepAndRetry(getExceptionExplorer(), 10 * 60 * 1000)
+			);
 
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 			for (Map<String, Object> info : infos) {
@@ -184,7 +205,7 @@ public class QWeiboApiService implements WeiboApiService {
 				name2WeiboUser(appKeys, name, filter, result);
 			}
 		} catch (Exception ignore) {
-			ignore.printStackTrace();
+			getLogger().warn("compute next keyword like fail,{}", ignore.getMessage());
 		}
 	}
 
@@ -200,12 +221,12 @@ public class QWeiboApiService implements WeiboApiService {
 		};
 	}
 
-	protected void computeNextTalkabout(WeiboAppKeys appKeys, Queue<String> result, 
+	protected void computeNextTalkabout(WeiboAppKeys appKeys, Queue<String> result,
 										BloomFilter<CharSequence> filter, int page,
 										WeiboTalking talking) {
 
 		try {
-			
+
 			Set<String> usernames = findWhoTalkaboutInternal(appKeys, talking, page);
 			for (String username : usernames) {
 				if (filter.mightContain(username)) {
@@ -214,20 +235,16 @@ public class QWeiboApiService implements WeiboApiService {
 				result.add(username);
 				filter.put(username);
 			}
-		} catch (Exception e) {
-			// log and ignore
-			logger.error("find who talking about fail.", e);
+		} catch (Exception ignore) {
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private Set<String> findWhoTalkaboutInternal(WeiboAppKeys appKeys, WeiboTalking talking, int page) {
 
-		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute();
-		if (!resp.isOK()) {
-			// log and just return
-			return Collections.emptySet();
-		}
+		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute(
+				WeiboApiRequestPolicies.newSleepAndRetry(getExceptionExplorer(), 10 * 60 * 1000)
+		);
 
 		Map<String, String> users = (Map<String, String>) resp.getResult().on("data").on("user").get();
 		return users.keySet();
@@ -270,7 +287,6 @@ public class QWeiboApiService implements WeiboApiService {
 		public final void remove() {
 			throw new UnsupportedOperationException();
 		}
-
 	}
 
 }

@@ -1,20 +1,13 @@
 package com.tobeface.tgenius.web;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.tobeface.modules.lang.Files;
 import com.tobeface.modules.lang.Strings;
-import com.tobeface.modules.lang.file.FileCommandInvoker;
-import com.tobeface.modules.lang.file.WriteBytesToFileCommand;
 import com.tobeface.modules.web.controller.ControllerSupport;
 import com.tobeface.tgenius.application.WeiboBombMessageService;
 import com.tobeface.tgenius.domain.WeiboLetter;
@@ -39,30 +32,16 @@ public class WeiboBombMessageController extends ControllerSupport {
 	 * @return
 	 */
 	@RequestMapping(value = "/letter-by-names/", method = RequestMethod.POST)
-	public String publishLetterByNames(@RequestParam("names") String namesString, WeiboLetter letter) {
-		bombMessageService.publishLetterByNames(Strings.split(namesString, ";"), letter);
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param file
-	 * @param letter
-	 * @return
-	 */
-	@RequestMapping(value = "/letter-by-names-file/", method = RequestMethod.POST)
-	public String publishLetterByNamesFile(@RequestParam("names") MultipartFile file, String fileEncoding, WeiboLetter letter) {
+	@ResponseBody
+	public CreateBombMessageResult publishLetterByNames(@RequestParam("names") String namesString, WeiboLetter letter) {
 
 		try {
 
-			File temp = File.createTempFile("letter-files", Files.suffix(file.getOriginalFilename()));
-			new FileCommandInvoker().command(new WriteBytesToFileCommand(temp, file.getBytes())).invoke();
-			List<String> names = com.google.common.io.Files.readLines(temp, Charset.forName(fileEncoding));
-			bombMessageService.publishLetterByNames(names.toArray(new String[names.size()]), letter);
+			bombMessageService.publishLetterByNames(Strings.split(namesString, ";"), letter);
+			return CreateBombMessageResult.create().success();
 		} catch (Exception e) {
-
+			return CreateBombMessageResult.create().error().message(e.getMessage());
 		}
-		return null;
 	}
 
 	/**
@@ -72,21 +51,80 @@ public class WeiboBombMessageController extends ControllerSupport {
 	 * @return
 	 */
 	@RequestMapping(value = "/letter-by-talkabout/", method = RequestMethod.POST)
-	public String publishLetterByTalkabout(WeiboTalking talking, WeiboLetter letter) {
-		bombMessageService.publishLetterByTalkabout(talking, letter);
-		return null;
+	@ResponseBody
+	public CreateBombMessageResult publishLetterByTalkabout(WeiboTalking talking, WeiboLetter letter) {
+		try {
+
+			bombMessageService.publishLetterByTalkabout(talking, letter);
+			return CreateBombMessageResult.create().success();
+		} catch (Exception e) {
+			return CreateBombMessageResult.create().error().message(e.getMessage());
+		}
 	}
 
 	@RequestMapping(value = "/mention-by-relay/", method = RequestMethod.POST)
-	public String publishMentionByRelay(WeiboMention mention) {
-		bombMessageService.publishMentionByRelay(mention);
-		return null;
+	@ResponseBody
+	public CreateBombMessageResult publishMentionByRelay(WeiboMention mention) {
+		try {
+
+			bombMessageService.publishMentionByRelay(mention);
+			return CreateBombMessageResult.create().success();
+		} catch (Exception e) {
+			return CreateBombMessageResult.create().error().message(e.getMessage());
+		}
 	}
 
 	@RequestMapping(value = "/mention-by-talkabout/", method = RequestMethod.POST)
-	public String publishMentionByTalkAbout(WeiboTalking talking, WeiboMention mention) {
-		bombMessageService.publishMetionByTalkabout(talking, mention);
-		return null;
+	@ResponseBody
+	public CreateBombMessageResult publishMentionByTalkAbout(WeiboTalking talking, WeiboMention mention) {
+		try {
+
+			bombMessageService.publishMetionByTalkabout(talking, mention);
+			return CreateBombMessageResult.create().success();
+		} catch (Exception e) {
+			return CreateBombMessageResult.create().error().message(e.getMessage());
+		}
+	}
+
+	/**
+	 * 
+	 * @author loudyn
+	 * 
+	 */
+	static class CreateBombMessageResult {
+		String result;
+		String message;
+
+		public String getResult() {
+			return result;
+		}
+
+		public CreateBombMessageResult success() {
+			return result("success");
+		}
+
+		public CreateBombMessageResult error() {
+			return result("error");
+		}
+
+		public CreateBombMessageResult result(String result) {
+			this.result = result;
+			return this;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public CreateBombMessageResult message(String message) {
+			this.message = message;
+			return this;
+		}
+
+		public static CreateBombMessageResult create() {
+			return new CreateBombMessageResult();
+		}
+
 	}
 
 }

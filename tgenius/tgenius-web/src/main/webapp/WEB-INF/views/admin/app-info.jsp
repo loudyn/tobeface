@@ -16,7 +16,7 @@
 			current += 1000;
 			var date = new Date();
 			date.setTime(current);
-			$("#current").empty().append("当前时间：" + date.toLocaleString());
+			$("#current").empty().append("当前时间：" + tgenius.date2string(date,"yyyy-MM-dd hh:mm:ss"));
 		});
 	});
 </script>
@@ -25,7 +25,7 @@
 <div class="nrgt">
 <div class="chsm"><span>软件信息</span></div>
 <ul class="inx_con">
-<p id="current">当前时间：</p>
+<p id="current">正在获取当前时间,请稍后...</p>
 <li>操作系统：${props['os.name'] }</li>
 <li>操作系统版本：${props['os.version'] }</li>
 <li>JAVA运行时环境版本：${props['java.version'] }</li>

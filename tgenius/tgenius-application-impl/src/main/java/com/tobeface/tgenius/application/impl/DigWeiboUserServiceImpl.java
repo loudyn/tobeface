@@ -38,10 +38,11 @@ public class DigWeiboUserServiceImpl implements DigWeiboUserService {
 
 			@Override
 			public void run() {
+
 				WeiboAppKeys appKeys = weiboAppKeysRepository.findAnyAvaliable();
 				Iterator<WeiboUser> it = weiboApiService.findWhoKeywordLikes(appKeys, keyword);
 				saveOrUpdateWeiboUsers(it);
-			}
+			} // end of run
 		});
 	}
 
@@ -59,7 +60,6 @@ public class DigWeiboUserServiceImpl implements DigWeiboUserService {
 
 				weiboUserRepository.save(entity);
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}

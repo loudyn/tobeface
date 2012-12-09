@@ -18,6 +18,7 @@
 </shiro:hasPermission>
 <shiro:hasPermission name="weibo-user:list">
 <li><a href="${ctx}//weibo-user/list/" target="right"><span class="allIco ico15"></span>Weibo用户管理</a></li>
+<li><a href="${ctx}//weibo-user/dump/" target="right"><span class="allIco ico15"></span>Weibo用户导出</a></li>
 </shiro:hasPermission>
 </ul>
 </div>

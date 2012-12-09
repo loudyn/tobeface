@@ -58,8 +58,8 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 	@TableValueConverters(downstream = { @TableValueConverter(type = SexConverter.class, method = "convert") })
 	private int sex;
 	@JsonProperty("birth_year")
+	@TableValueConverters(downstream = { @TableValueConverter(type = BirthYearConverter.class, method = "convert") })
 	@TableField(columnIndex = 8, columnName = "出生年份")
-	@TableValueConverters()
 	private int birthYear;
 	@JsonProperty("fansnum")
 	@TableField(columnIndex = 9, columnName = "粉丝数目")
@@ -249,6 +249,17 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 		 */
 		public String convert(int value) {
 			return (value == 1) ? "男" : (value == 2) ? "女" : "未填写";
+		}
+	}
+
+	public static class BirthYearConverter {
+		/**
+		 * 
+		 * @param value
+		 * @return
+		 */
+		public String convert(int value) {
+			return (value == 0) ? "用户未填写" : String.valueOf(value);
 		}
 	}
 }

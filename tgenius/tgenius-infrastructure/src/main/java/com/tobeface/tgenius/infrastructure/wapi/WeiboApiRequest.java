@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.ImmutableMap;
 import com.tobeface.modules.helper.CodeHelper;
 import com.tobeface.modules.lang.Preconditions;
+import com.tobeface.tgenius.infrastructure.wapi.policy.WeiboApiRequestPolicies;
 
 /**
  * 
@@ -85,7 +86,16 @@ public final class WeiboApiRequest {
 	 * @return
 	 */
 	public WeiboApiResponse execute() {
-		return WeiboApiRequestPerformer.perform(this);
+		return execute(WeiboApiRequestPolicies.newNop());
+	}
+
+	/**
+	 * 
+	 * @param policy
+	 * @return
+	 */
+	public WeiboApiResponse execute(WeiboApiRequestPolicy policy) {
+		return WeiboApiRequestPerformer.perform(this, policy);
 	}
 
 	/**
@@ -137,7 +147,7 @@ public final class WeiboApiRequest {
 	public WeiboApiRequest param(String paramName, Object paramValue) {
 		Preconditions.hasText(paramName);
 		Preconditions.notNull(paramValue);
-		
+
 		if (isGetVerb()) {
 			queryParams.put(paramName, paramValue);
 			return this;
@@ -154,7 +164,7 @@ public final class WeiboApiRequest {
 	 */
 	public WeiboApiRequest params(Map<String, Object> params) {
 		Preconditions.notNull(params);
-		
+
 		if (isGetVerb()) {
 			queryParams.putAll(params);
 			return this;

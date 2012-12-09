@@ -79,7 +79,7 @@ final class WeiboApiRequestPerformer {
 	 * @param req
 	 * @return
 	 */
-	static WeiboApiResponse perform(WeiboApiRequest req) {
+	static WeiboApiResponse perform(WeiboApiRequest req, WeiboApiRequestPolicy policy) {
 		Preconditions.notNull(req);
 
 		HttpUriRequest httpReq = WeiboApiRequestPerformer.transform(req);
@@ -90,12 +90,11 @@ final class WeiboApiRequestPerformer {
 			client.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000);
 			client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 3000);
 
-			HttpResponse resp = client.execute(httpReq);
-			entity = resp.getEntity();
-			return new WeiboApiResponse(EntityUtils.toString(entity));
+			HttpResponse httpResp = client.execute(httpReq);
+			entity = httpResp.getEntity();
+			return policy.continueExecute(req, new WeiboApiResponse(EntityUtils.toString(entity)));
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw Lang.uncheck(e);
+			throw new WeiboApiException(e);
 		} finally {
 			EntityUtils.consumeQuietly(entity);
 		}
