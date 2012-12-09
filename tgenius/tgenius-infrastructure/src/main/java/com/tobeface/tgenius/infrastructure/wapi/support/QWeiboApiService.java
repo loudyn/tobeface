@@ -41,7 +41,7 @@ import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategi
 public class QWeiboApiService implements WeiboApiService {
 
 	private Logger logger = LoggerFactory.getLogger(QWeiboApiService.class);
-
+	
 	@Autowired
 	@Qualifier("qweibo-api-exception-explorer")
 	private WeiboApiExceptionExplorer exceptionExplorer;
@@ -75,8 +75,8 @@ public class QWeiboApiService implements WeiboApiService {
 	public void sendMentionByRelay(WeiboAppKeys appKeys, WeiboMention mention) {
 		checkNotNull(appKeys, mention);
 
-		WeiboApiRequestStrategy policy = WeiboApiRequestStrategies.newFastFail(getExceptionExplorer());
-		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute(policy);
+		WeiboApiRequestStrategy strategy = WeiboApiRequestStrategies.newFastFail(getExceptionExplorer());
+		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute(strategy);
 
 		WeiboApiResponseResult result = resp.getResult();
 		List<Map<String, Object>> infos = (List<Map<String, Object>>) result.on("data").on("info").get();
@@ -92,7 +92,7 @@ public class QWeiboApiService implements WeiboApiService {
 		}
 
 		WeiboApiRequest addRelay = QWeiboApiRequests.newAddRelay(appKeys, relayId, mention.getContent());
-		addRelay.execute(policy);
+		addRelay.execute(strategy);
 	}
 
 	@Override
@@ -136,7 +136,7 @@ public class QWeiboApiService implements WeiboApiService {
 		try {
 
 			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute(
-					WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 10 * 60 * 1000)
+					WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000)
 			);
 
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
@@ -196,7 +196,7 @@ public class QWeiboApiService implements WeiboApiService {
 		try {
 
 			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute(
-					WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 10 * 60 * 1000)
+					WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000)
 			);
 
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
@@ -243,7 +243,7 @@ public class QWeiboApiService implements WeiboApiService {
 	private Set<String> findWhoTalkaboutInternal(WeiboAppKeys appKeys, WeiboTalking talking, int page) {
 
 		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute(
-				WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 10 * 60 * 1000)
+				WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000)
 		);
 
 		Map<String, String> users = (Map<String, String>) resp.getResult().on("data").on("user").get();

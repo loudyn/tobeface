@@ -50,7 +50,7 @@ final class SleepAndRetryWeiboApiRequestStrategy extends AbstractWeiboApiRequest
 		if (WeiboApiExceptions.isAccessLimit(ex) && canRetryAgain()) {
 			logger.warn(
 							"Access rate limit,sleep {} {} and retry again,retry {} times yet", 
-							new Object[] { sleepTime, "millsecond", retryTimes }
+							new Object[] { sleepTime, "millsecond", retryTimes - 1 }
 						);
 			
 			Lang.sleepQuietly(sleepTime);
