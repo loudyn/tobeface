@@ -1,4 +1,6 @@
-package com.tobeface.tgenius.infrastructure.wapi.policy;
+package com.tobeface.tgenius.infrastructure.wapi.strategy;
+
+import javax.annotation.concurrent.NotThreadSafe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,24 +18,41 @@ import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptions;
  * @author loudyn
  * 
  */
-class SleepAndRetryWeiboApiRequestPolicy extends AbstractWeiboApiRequestPolicy {
+@NotThreadSafe
+final class SleepAndRetryWeiboApiRequestStrategy extends AbstractWeiboApiRequestStrategy {
+
 	private Logger logger = LoggerFactory.getLogger(getClass());
+	private final int maxRetryTimes;
 	private final long sleepTime;
+
+	private int retryTimes = 0;
 
 	/**
 	 * 
 	 * @param sleepTime
 	 */
-	public SleepAndRetryWeiboApiRequestPolicy(long sleepTime, WeiboApiExceptionExplorer translator) {
-		super(translator);
+	SleepAndRetryWeiboApiRequestStrategy(WeiboApiExceptionExplorer explorer, long sleepTime) {
+		this(explorer, 3, sleepTime);
+	}
+
+	SleepAndRetryWeiboApiRequestStrategy(WeiboApiExceptionExplorer explorer, int maxRetryTimes, long sleepTime) {
+		super(explorer);
+
+		Preconditions.isTrue(maxRetryTimes > 0 && maxRetryTimes < 99);
 		Preconditions.isTrue(sleepTime > 0);
+		this.maxRetryTimes = maxRetryTimes;
 		this.sleepTime = sleepTime;
 	}
 
 	@Override
 	protected WeiboApiResponse continueExecute(WeiboApiRequest req, WeiboApiResponse preResp, WeiboApiException ex) {
-		if (WeiboApiExceptions.isAccessLimit(ex)) {
-			logger.warn("Access rate limit,sleep {} {} and retry again", sleepTime, "millsecond");
+		
+		if (WeiboApiExceptions.isAccessLimit(ex) && canRetryAgain()) {
+			logger.warn(
+							"Access rate limit,sleep {} {} and retry again,retry {} times yet", 
+							new Object[] { sleepTime, "millsecond", retryTimes }
+						);
+			
 			Lang.sleepQuietly(sleepTime);
 			return req.execute(this);
 		}
@@ -43,5 +62,9 @@ class SleepAndRetryWeiboApiRequestPolicy extends AbstractWeiboApiRequestPolicy {
 		}
 
 		return preResp;
+	}
+
+	private boolean canRetryAgain() {
+		return ++retryTimes <= maxRetryTimes;
 	}
 }

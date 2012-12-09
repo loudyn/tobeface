@@ -5,7 +5,7 @@ package com.tobeface.tgenius.infrastructure.wapi;
  * @author loudyn
  * 
  */
-public interface WeiboApiRequestPolicy {
+public interface WeiboApiRequestStrategy {
 
 	/**
 	 * 

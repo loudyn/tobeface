@@ -26,11 +26,11 @@ import com.tobeface.tgenius.domain.WeiboTalking;
 import com.tobeface.tgenius.domain.WeiboUser;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestPolicy;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse.WeiboApiResponseResult;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
-import com.tobeface.tgenius.infrastructure.wapi.policy.WeiboApiRequestPolicies;
+import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestPolicies;
 
 /**
  * 
@@ -75,7 +75,7 @@ public class QWeiboApiService implements WeiboApiService {
 	public void sendMentionByRelay(WeiboAppKeys appKeys, WeiboMention mention) {
 		checkNotNull(appKeys, mention);
 
-		WeiboApiRequestPolicy policy = WeiboApiRequestPolicies.newFastFail(getExceptionExplorer());
+		WeiboApiRequestStrategy policy = WeiboApiRequestPolicies.newFastFail(getExceptionExplorer());
 		WeiboApiResponse resp = QWeiboApiRequests.newTrendsTwitter(appKeys).execute(policy);
 
 		WeiboApiResponseResult result = resp.getResult();

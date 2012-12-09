@@ -1,7 +1,7 @@
-package com.tobeface.tgenius.infrastructure.wapi.policy;
+package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestPolicy;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 
 /**
@@ -9,7 +9,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
  * @author loudyn
  * 
  */
-final class NopWeiboApiRequestPolicy implements WeiboApiRequestPolicy {
+final class NOPWeiboApiRequestStrategy implements WeiboApiRequestStrategy {
 
 	@Override
 	public WeiboApiResponse continueExecute(WeiboApiRequest req, WeiboApiResponse preResp) {

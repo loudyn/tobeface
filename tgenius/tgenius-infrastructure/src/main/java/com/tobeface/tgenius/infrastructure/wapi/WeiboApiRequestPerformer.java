@@ -79,7 +79,7 @@ final class WeiboApiRequestPerformer {
 	 * @param req
 	 * @return
 	 */
-	static WeiboApiResponse perform(WeiboApiRequest req, WeiboApiRequestPolicy policy) {
+	static WeiboApiResponse perform(WeiboApiRequest req, WeiboApiRequestStrategy strategy) {
 		Preconditions.notNull(req);
 
 		HttpUriRequest httpReq = WeiboApiRequestPerformer.transform(req);
@@ -92,7 +92,7 @@ final class WeiboApiRequestPerformer {
 
 			HttpResponse httpResp = client.execute(httpReq);
 			entity = httpResp.getEntity();
-			return policy.continueExecute(req, new WeiboApiResponse(EntityUtils.toString(entity)));
+			return strategy.continueExecute(req, new WeiboApiResponse(EntityUtils.toString(entity)));
 		} catch (Exception e) {
 			throw new WeiboApiException(e);
 		} finally {

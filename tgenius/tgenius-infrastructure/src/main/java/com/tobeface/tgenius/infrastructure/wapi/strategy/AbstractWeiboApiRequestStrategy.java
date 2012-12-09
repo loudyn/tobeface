@@ -1,10 +1,10 @@
-package com.tobeface.tgenius.infrastructure.wapi.policy;
+package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
 import com.tobeface.modules.lang.Preconditions;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiException;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestPolicy;
+import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 
 /**
@@ -12,7 +12,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
  * @author loudyn
  * 
  */
-public abstract class AbstractWeiboApiRequestPolicy implements WeiboApiRequestPolicy {
+public abstract class AbstractWeiboApiRequestStrategy implements WeiboApiRequestStrategy {
 
 	private final WeiboApiExceptionExplorer exceptionExplorer;
 
@@ -20,7 +20,7 @@ public abstract class AbstractWeiboApiRequestPolicy implements WeiboApiRequestPo
 	 * 
 	 * @param exceptionExplorer
 	 */
-	protected AbstractWeiboApiRequestPolicy(WeiboApiExceptionExplorer exceptionExplorer) {
+	protected AbstractWeiboApiRequestStrategy(WeiboApiExceptionExplorer exceptionExplorer) {
 		Preconditions.notNull(exceptionExplorer);
 		this.exceptionExplorer = exceptionExplorer;
 	}

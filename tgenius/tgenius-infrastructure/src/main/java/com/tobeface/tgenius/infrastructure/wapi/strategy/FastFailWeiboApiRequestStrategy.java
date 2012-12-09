@@ -1,4 +1,4 @@
-package com.tobeface.tgenius.infrastructure.wapi.policy;
+package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,11 +13,11 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
  * @author loudyn
  * 
  */
-final class FastFailWeiboApiRequestPolicy extends AbstractWeiboApiRequestPolicy {
+final class FastFailWeiboApiRequestStrategy extends AbstractWeiboApiRequestStrategy {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
-	FastFailWeiboApiRequestPolicy(WeiboApiExceptionExplorer exceptionTranslator) {
+	FastFailWeiboApiRequestStrategy(WeiboApiExceptionExplorer exceptionTranslator) {
 		super(exceptionTranslator);
 	}
 
