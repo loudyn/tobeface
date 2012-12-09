@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.ImmutableMap;
 import com.tobeface.modules.helper.CodeHelper;
 import com.tobeface.modules.lang.Preconditions;
-import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestPolicies;
+import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategies;
 
 /**
  * 
@@ -86,7 +86,7 @@ public final class WeiboApiRequest {
 	 * @return
 	 */
 	public WeiboApiResponse execute() {
-		return execute(WeiboApiRequestPolicies.newNOP());
+		return execute(WeiboApiRequestStrategies.newNOP());
 	}
 
 	/**

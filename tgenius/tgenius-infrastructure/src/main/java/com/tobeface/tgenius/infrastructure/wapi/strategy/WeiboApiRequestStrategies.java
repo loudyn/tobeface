@@ -8,8 +8,8 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
  * @author loudyn
  * 
  */
-public final class WeiboApiRequestPolicies {
-
+public final class WeiboApiRequestStrategies {
+	
 	/**
 	 * 
 	 * @return
@@ -48,5 +48,5 @@ public final class WeiboApiRequestPolicies {
 		return new SleepAndRetryWeiboApiRequestStrategy(explorer, maxRetryTimes, sleepTime);
 	}
 
-	private WeiboApiRequestPolicies() {}
+	private WeiboApiRequestStrategies() {}
 }
