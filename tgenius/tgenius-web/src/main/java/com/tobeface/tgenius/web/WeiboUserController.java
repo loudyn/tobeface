@@ -3,6 +3,7 @@ package com.tobeface.tgenius.web;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tobeface.modules.domain.Page;
 import com.tobeface.modules.helper.CodeHelper;
@@ -54,17 +56,17 @@ public class WeiboUserController extends ControllerSupport {
 	}
 
 	@RequestMapping(value = "/dump-xls/", method = RequestMethod.POST)
-	public void dumpXls(HttpServletResponse resp) {
+	public void dumpXls(HttpServletResponse resp, @RequestParam Map<String, String> params) {
 		try {
 
 			Webs.prepareDownload(resp, "weibo-user.xls", ContentType.EXCEL);
 
-			List<WeiboUser> entities = weiboUserService.query(new Object());
+			List<WeiboUser> entities = weiboUserService.query(params);
 			File temp = File.createTempFile("dump", ".xls");
 			String templatename = CodeHelper.urlDecode(
 														getClass().getResource("/META-INF/xls/template.xls").getFile(),
 														"UTF-8"
-													);
+												);
 
 			File template = new File(templatename);
 			Table xls = Tables.newXls(temp, template);

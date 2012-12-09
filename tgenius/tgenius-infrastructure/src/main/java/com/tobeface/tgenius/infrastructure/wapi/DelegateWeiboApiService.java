@@ -17,18 +17,6 @@ import com.tobeface.tgenius.domain.WeiboUser;
  */
 public abstract class DelegateWeiboApiService implements WeiboApiService {
 
-	/**
-	 * 
-	 * @author loudyn
-	 * 
-	 */
-	@SuppressWarnings("serial")
-	class DelegateWeiboApiServiceNotFoundException extends RuntimeException {
-		DelegateWeiboApiServiceNotFoundException(String delegateKey) {
-			super("Can't find delegate WeiboApiService[" + delegateKey + "]");
-		}
-	}
-
 	private final Map<String, WeiboApiService> delegates;
 
 	/**
@@ -95,4 +83,17 @@ public abstract class DelegateWeiboApiService implements WeiboApiService {
 	 * @return
 	 */
 	protected abstract String determineDelegateKey(WeiboAppKeys appKeys);
+
+	/**
+	 * 
+	 * @author loudyn
+	 * 
+	 */
+	@SuppressWarnings("serial")
+	class DelegateWeiboApiServiceNotFoundException extends RuntimeException {
+		DelegateWeiboApiServiceNotFoundException(String delegateKey) {
+			super("Can't find delegate WeiboApiService[" + delegateKey + "]");
+		}
+	}
+
 }

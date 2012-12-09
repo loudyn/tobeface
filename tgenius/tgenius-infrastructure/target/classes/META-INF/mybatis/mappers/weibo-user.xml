@@ -60,7 +60,7 @@
 
 <select id="queryUniqueByName" resultType="hashmap">
 	<include refid="jsonSelect"/>
-	where self.name=#{name} and status=1
+	where self.name=#{name} 
 </select>
 
 <select id="existsByName" resultType="boolean">
@@ -69,14 +69,41 @@
 
 <select id="query" resultMap="weiboUserResult">
 	<include refid="commonSelect"/>
-	where self.sex in (0,1,2) and self.is_vip in (0, 1) order by self.fans_count desc 
+	<where>
+		<choose>
+			<when test="sex != null and sex != ''">
+				self.sex=#{sex} 
+			</when>
+			<otherwise>
+				self.sex in (0, 1, 2) 
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="vip != null and vip != ''">
+				and self.is_vip=#{vip}  
+			</when>
+			<otherwise>
+				and self.is_vip in (0, 1) 
+			</otherwise>
+		</choose>
+		<if test="loc != null and loc != ''">
+			and self.location like concat(#{loc},'%') 
+		</if>
+		<if test="name != null and name != ''">
+			and self.name like concat(#{name},'%') 
+		</if>
+		<if test="fans != null and fans != ''">
+			and self.fans_count > #{fans}  
+		</if>
+	</where>
+	order by self.fans_count desc  
 </select>
 
 <select id="queryPage" resultMap="weiboUserResult">
 	<include refid="commonSelect"/>
 	<where>
 		<choose>
-			<when test="params.sex != null and params.name != ''">
+			<when test="params.sex != null and params.sex != ''">
 				self.sex=#{params.sex} 
 			</when>
 			<otherwise>
@@ -91,8 +118,14 @@
 				and self.is_vip in (0, 1) 
 			</otherwise>
 		</choose>
+		<if test="params.loc != null and params.loc != ''">
+			and self.location like concat(#{params.loc},'%') 
+		</if>
 		<if test="params.name != null and params.name != ''">
 			and self.name like concat(#{params.name},'%') 
+		</if>
+		<if test="params.fans != null and params.fans != ''">
+			and self.fans_count > #{params.fans}  
 		</if>
 	</where>
 	order by self.fans_count desc 

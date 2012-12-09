@@ -41,8 +41,7 @@ public class MybatisWeiboUserRepository extends MybatisRepositorySupport<String,
 		Preconditions.hasText(name);
 		try {
 
-			Map<String, String> jsonMap = (Map<String, String>) getSqlSession()
-					.selectOne(getNamespace().concat(".queryUniqueByName"), name);
+			Map<String, String> jsonMap = (Map<String, String>) getSqlSession().selectOne(getNamespace().concat(".queryUniqueByName"), name);
 			return JsonHelper.fromJsonString(jsonMap.get("json"), WeiboUser.class);
 		} catch (Exception e) {
 			throw new DataAccessException(e);

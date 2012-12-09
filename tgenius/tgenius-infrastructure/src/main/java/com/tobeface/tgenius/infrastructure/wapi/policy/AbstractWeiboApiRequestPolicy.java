@@ -12,7 +12,7 @@ import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
  * @author loudyn
  * 
  */
-abstract class AbstractWeiboApiRequestPolicy implements WeiboApiRequestPolicy {
+public abstract class AbstractWeiboApiRequestPolicy implements WeiboApiRequestPolicy {
 
 	private final WeiboApiExceptionExplorer exceptionExplorer;
 
