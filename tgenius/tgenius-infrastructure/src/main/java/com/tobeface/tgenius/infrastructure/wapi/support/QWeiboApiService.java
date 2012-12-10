@@ -59,9 +59,7 @@ public class QWeiboApiService implements WeiboApiService {
 		checkNotNull(appKeys, which, letter);
 
 		WeiboApiRequest req = QWeiboApiRequests.newAddPrivate(appKeys, which, letter.getContent());
-		req.execute(
-						WeiboApiRequestStrategies.newFastFail(getExceptionExplorer())
-		);
+		req.execute(WeiboApiRequestStrategies.newFastFail(getExceptionExplorer()));
 	}
 
 	private void checkNotNull(Object... objs) {
@@ -110,9 +108,8 @@ public class QWeiboApiService implements WeiboApiService {
 			mention.mention(username);
 		}
 
-		QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent()).execute(
-				WeiboApiRequestStrategies.newFastFail(getExceptionExplorer())
-		);
+		QWeiboApiRequests.newAddTwitter(appKeys, mention.getContent())
+							.execute(WeiboApiRequestStrategies.newFastFail(getExceptionExplorer()));
 	}
 
 	@Override
@@ -135,9 +132,8 @@ public class QWeiboApiService implements WeiboApiService {
 
 		try {
 
-			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page).execute(
-					WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000)
-			);
+			WeiboApiResponse resp = QWeiboApiRequests.newSearchUserByTags(appKeys, tags, page)
+														.execute(WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000));
 
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 			for (Map<String, Object> info : infos) {
@@ -167,9 +163,8 @@ public class QWeiboApiService implements WeiboApiService {
 
 	@SuppressWarnings("unchecked")
 	private WeiboUser findWeiboUserByName(WeiboAppKeys appKeys, String name) {
-		WeiboApiResponse resp = QWeiboApiRequests.newOtherInfo(appKeys, name).execute(
-				WeiboApiRequestStrategies.newFastFail(getExceptionExplorer())
-		);
+		WeiboApiResponse resp = QWeiboApiRequests.newOtherInfo(appKeys, name)
+													.execute(WeiboApiRequestStrategies.newFastFail(getExceptionExplorer()));
 
 		Map<String, Object> data = (Map<String, Object>) resp.getResult().on("data").get();
 		return JsonHelper.newfor(data, WeiboUser.class);
@@ -195,9 +190,8 @@ public class QWeiboApiService implements WeiboApiService {
 
 		try {
 
-			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page).execute(
-					WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000)
-			);
+			WeiboApiResponse resp = QWeiboApiRequests.newSearchUser(appKeys, keyword, page)
+														.execute(WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000));
 
 			List<Map<String, Object>> infos = (List<Map<String, Object>>) resp.getResult().on("data").on("info").get();
 			for (Map<String, Object> info : infos) {
@@ -242,9 +236,8 @@ public class QWeiboApiService implements WeiboApiService {
 	@SuppressWarnings("unchecked")
 	private Set<String> findWhoTalkaboutInternal(WeiboAppKeys appKeys, WeiboTalking talking, int page) {
 
-		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page).execute(
-				WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000)
-		);
+		WeiboApiResponse resp = QWeiboApiRequests.newSearchTwitter(appKeys, talking, page)
+													.execute(WeiboApiRequestStrategies.newSleepAndRetry(getExceptionExplorer(), 3 * 60 * 1000));
 
 		Map<String, String> users = (Map<String, String>) resp.getResult().on("data").on("user").get();
 		return users.keySet();
