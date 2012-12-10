@@ -81,5 +81,5 @@
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
 	
-<!-- 	<import resource="classpath:/META-INF/spring/application-shiro.xml"/> -->
+	<import resource="classpath:/META-INF/spring/application-infrastructure.xml"/>
 </beans>
