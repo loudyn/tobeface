@@ -42,4 +42,19 @@ public class WeiboUserServiceImpl implements WeiboUserService {
 	public void deleteByName(String name) {
 		weiboUserRepository.deleteByName(name);
 	}
+
+	@Override
+	public boolean existsByName(String name) {
+		return weiboUserRepository.existsByName(name);
+	}
+
+	@Override
+	public void update(WeiboUser entity) {
+		weiboUserRepository.update(entity);
+	}
+
+	@Override
+	public void save(WeiboUser entity) {
+		weiboUserRepository.save(entity);
+	}
 }

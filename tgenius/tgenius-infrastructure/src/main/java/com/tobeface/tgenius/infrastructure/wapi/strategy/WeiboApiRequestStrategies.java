@@ -1,7 +1,7 @@
 package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplorer;
 
 /**
  * 

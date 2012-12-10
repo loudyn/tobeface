@@ -31,6 +31,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.Preconditions;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiException;
 
 /**
  * 

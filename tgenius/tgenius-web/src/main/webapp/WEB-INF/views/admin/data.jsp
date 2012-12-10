@@ -13,13 +13,14 @@
 <ul class="wcc">
 <h1><strong>数据管理</strong></h1>
 <shiro:hasPermission name="weibo-app-keys:list">
-<li><a href="${ctx}//weibo-app-keys/list/" target="right"><span class="allIco ico15"></span>AppKeys管理</a></li>
-<li><a href="${ctx}//weibo-app-keys/create/" target="right"><span class="allIco ico15"></span>创建AppKeys</a></li>
+<li><a href="${ctx}/weibo-app-keys/list/" target="right"><span class="allIco ico15"></span>AppKeys管理</a></li>
+<li><a href="${ctx}/weibo-app-keys/create/" target="right"><span class="allIco ico15"></span>创建AppKeys</a></li>
 </shiro:hasPermission>
 <shiro:hasPermission name="weibo-user:list">
-<li><a href="${ctx}//weibo-user/list/" target="right"><span class="allIco ico15"></span>Weibo用户管理</a></li>
-<li><a href="${ctx}//weibo-user/dump/" target="right"><span class="allIco ico15"></span>Weibo用户导出</a></li>
+<li><a href="${ctx}/weibo-user/list/" target="right"><span class="allIco ico15"></span>Weibo用户管理</a></li>
+<li><a href="${ctx}/weibo-user/dump/" target="right"><span class="allIco ico15"></span>Weibo用户导出</a></li>
 </shiro:hasPermission>
+<li><a href="${ctx}/weibo-task/list/" target="right"><span class="allIco ico15"></span>Weibo任务管理</a></li>
 </ul>
 </div>
 </body>

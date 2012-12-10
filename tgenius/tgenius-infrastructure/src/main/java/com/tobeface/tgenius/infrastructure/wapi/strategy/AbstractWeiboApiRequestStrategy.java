@@ -1,11 +1,11 @@
 package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
 import com.tobeface.modules.lang.Preconditions;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiException;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiException;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplorer;
 
 /**
  * 

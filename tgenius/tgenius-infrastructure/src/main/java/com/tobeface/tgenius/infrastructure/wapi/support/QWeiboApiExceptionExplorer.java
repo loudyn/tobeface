@@ -2,10 +2,10 @@ package com.tobeface.tgenius.infrastructure.wapi.support;
 
 import org.springframework.stereotype.Component;
 
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiException;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse.WeiboApiResponseResult;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiException;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptions;
 
 /**

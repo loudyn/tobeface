@@ -7,10 +7,10 @@ import org.slf4j.LoggerFactory;
 
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.Preconditions;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiException;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiException;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptions;
 
 /**

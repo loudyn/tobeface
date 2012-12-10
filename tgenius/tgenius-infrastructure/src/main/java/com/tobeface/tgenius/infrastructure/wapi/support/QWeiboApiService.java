@@ -24,11 +24,11 @@ import com.tobeface.tgenius.domain.WeiboLetter;
 import com.tobeface.tgenius.domain.WeiboMention;
 import com.tobeface.tgenius.domain.WeiboTalking;
 import com.tobeface.tgenius.domain.WeiboUser;
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse.WeiboApiResponseResult;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplorer;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiService;
 import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategies;
 

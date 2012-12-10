@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tobeface.tgenius.domain.task.WeiboTask">
+
+<resultMap type="WeiboTask" id="weiboTaskResult">
+	<id property="id" column="id"/>
+	<result property="name" column="name"/>
+	<result property="createTime" column="create_time"/>
+	<collection property="handleEvents" column="id" select="selectHandleEvents"/>
+</resultMap>
+
+<resultMap type="WeiboTaskHandleEvent" id="eventOnTask">
+	<result property="message" column="event_message"/>
+	<result property="createTime" column="event_create_time"/>
+</resultMap>
+
+<sql id="commonSelect">
+	select 
+		self.* 
+	from weibo_task self 
+</sql>
+
+<select id="selectHandleEvents" resultMap="eventOnTask">
+	select 
+		event.message as event_message,
+		event.create_time as event_create_time 
+	from weibo_task_handle_event event where task_id=#{id} order by create_time asc
+</select>
+
+<insert id="save" keyProperty="id" useGeneratedKeys="true">
+	insert into weibo_task(name,create_time) values (#{name},#{createTime})
+</insert>
+
+<insert id="saveEvents" >
+	insert into weibo_task_handle_event(task_id,message,create_time) values 
+	<foreach item="event" collection="uncommitHandleEvents" open="" separator="," close="">
+		(#{event.task.id},#{event.message},#{event.createTime})
+	</foreach>			
+</insert>
+
+<select id="queryPage" resultMap="weiboTaskResult">
+	<include refid="commonSelect"/>
+	order by self.create_time desc 
+</select>
+</mapper>

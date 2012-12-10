@@ -1,4 +1,4 @@
-package com.tobeface.tgenius.infrastructure.wapi;
+package com.tobeface.tgenius.infrastructure.wapi.exception;
 
 /**
  * 

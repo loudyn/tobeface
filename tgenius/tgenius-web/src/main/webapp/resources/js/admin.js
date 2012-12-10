@@ -118,7 +118,7 @@ $(function() {
 	 $(".date").each(function(){
 		 var $this = $(this);
 		 var lastModified = $this.text();
- 		 $this.empty().append(tgenius.formatDate(lastModified));
+ 		 $this.empty().append(tgenius.long2date(lastModified));
 	  });
 	 
 	 $(".fileSize").each(function(){
