@@ -4,10 +4,15 @@
 <head>
 <%@include file="/WEB-INF/commons/taglibs.jsp" %>
 <%@include file="/WEB-INF/commons/common-header.jsp" %>
+<script src="${ctx }/resources/js/jquery-timer.js" type="text/javascript"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript">
 	$(function(){
 		$("#commit").click(function(){
+			var $this = $(this);
+			$this.attr("disabled", true).oneTime("2s","disable",function(){
+				$this.attr("disabled",false);
+			});
 			var type = $("#type").val();
 			var value = $("#content").val();
 			var url = (type === "byKeyword") ? "${ctx}/dig-weibo-user/by-keyword/" : "${ctx}/dig-weibo-user/by-tags/";
