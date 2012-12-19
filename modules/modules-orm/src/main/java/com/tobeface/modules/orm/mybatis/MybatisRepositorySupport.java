@@ -93,7 +93,6 @@ public abstract class MybatisRepositorySupport<ID, T> extends SqlSessionDaoSuppo
 	 * @param value
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public List<T> query(Object value) {
 		try {
 
@@ -108,7 +107,6 @@ public abstract class MybatisRepositorySupport<ID, T> extends SqlSessionDaoSuppo
 	 * @param page
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	public Page<T> queryPage(Page<T> page) {
 		Preconditions.notNull(page, new DataAccessException("page must not be null!"));
 
@@ -134,7 +132,7 @@ public abstract class MybatisRepositorySupport<ID, T> extends SqlSessionDaoSuppo
 	 * 
 	 * @return
 	 */
-	public Class<ID> getIdClazz() {
+	protected Class<ID> getIdClazz() {
 		return idClazz;
 	}
 
@@ -142,7 +140,7 @@ public abstract class MybatisRepositorySupport<ID, T> extends SqlSessionDaoSuppo
 	 * 
 	 * @return
 	 */
-	public Class<T> getEntityClazz() {
+	protected Class<T> getEntityClazz() {
 		return entityClazz;
 	}
 

@@ -115,11 +115,11 @@ final class XlsTable implements Table {
 			HSSFSheet sheet = XlsTableUtils.loadSheet(conf, wb);
 			Map<String, Integer> headers = XlsTableUtils.loadSheetHeader(conf, sheet);
 			
+			Ghost<T> ghost = Ghost.me(clazz);
 			for (int i = conf.startRow; i < sheet.getLastRowNum(); i++) {
 				HSSFRow row = sheet.getRow(i);
-				Ghost<T> ghost = Ghost.me(clazz);
 				T obj = ghost.born();
-				selectEachRow(headers, row, ghost, obj);
+				selectEachRow(headers, row, obj);
 				result.add(obj);
 			}
 
@@ -131,7 +131,7 @@ final class XlsTable implements Table {
 		}
 	}
 
-	private <T> void selectEachRow(Map<String, Integer> headers, HSSFRow row, Ghost<T> ghost, T obj) throws IllegalAccessException, InvocationTargetException {
+	private <T> void selectEachRow(Map<String, Integer> headers, HSSFRow row, T obj) throws IllegalAccessException, InvocationTargetException {
 		Field[] tableFields = TableFields.tableFields(obj);
 		for (Field field : tableFields) {
 			

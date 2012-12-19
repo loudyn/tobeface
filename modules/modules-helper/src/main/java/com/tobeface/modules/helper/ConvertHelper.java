@@ -17,7 +17,7 @@ import com.tobeface.modules.lang.Preconditions;
  * @author loudyn
  * 
  */
-public class ConvertHelper {
+public final class ConvertHelper {
 
 	/**
 	 * 

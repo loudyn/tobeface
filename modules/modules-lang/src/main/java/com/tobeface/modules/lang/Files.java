@@ -261,9 +261,9 @@ public final class Files {
 	public static void move(File source, File target) {
 
 		new FileCommandInvoker().command(new MakeFileCommand(target))
-				.command(new CopyFileCommand(source, target))
-				.command(new DeleteFileCommand(source))
-				.invoke();
+								.command(new CopyFileCommand(source, target))
+								.command(new DeleteFileCommand(source))
+								.invoke();
 	}
 
 	/**
@@ -468,9 +468,16 @@ public final class Files {
 	}
 
 	public static enum FileType {
-		JPG("jpg", "FFD8FF"), ICO("ico", "00000100"), BMP("bmp", "424D"), GIF("gif", "47494638"), PNG("png", "89504E47"),
-		ZIP("zip", "504B0304"), RAR("rar", "52617221"),
-		PDF("pdf", "25504446"), DOC_OR_XLS_OR_PPT("doc;xls;ppt", "D0CF11E0"), DOCX("docx", "504B0304");
+		JPG("jpg", "FFD8FF"), 
+		ICO("ico", "00000100"), 
+		BMP("bmp", "424D"), 
+		GIF("gif", "47494638"), 
+		PNG("png", "89504E47"),
+		ZIP("zip", "504B0304"), 
+		RAR("rar", "52617221"),
+		PDF("pdf", "25504446"), 
+		DOC_OR_XLS_OR_PPT("doc;xls;ppt", "D0CF11E0"), 
+		DOCX("docx", "504B0304");
 
 		private final String name;
 		private final String hexHeader;

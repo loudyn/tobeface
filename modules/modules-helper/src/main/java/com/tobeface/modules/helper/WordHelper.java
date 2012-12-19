@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.tobeface.modules.lang.Lang;
+import com.tobeface.modules.lang.Patterns;
 
 /**
  * 
@@ -310,7 +311,7 @@ public class WordHelper {
 		sort(hitWords, WORD_COMPARATOR);
 
 		for (String foundWord : hitWords) {
-			text = text.replaceAll("(?iu)" + PatternHelper.quoteReplace(foundWord), replacement);
+			text = text.replaceAll("(?iu)" + Patterns.quoteReplace(foundWord), replacement);
 		}
 		return text;
 	}

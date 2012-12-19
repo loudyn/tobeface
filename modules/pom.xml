@@ -13,14 +13,17 @@
 		<module>modules-web</module>
 		<module>modules-orm</module>
 		<module>modules-table</module>
+		<module>modules-event</module>
 	</modules>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.0.RELEASE</org.springframework-version>
-		<org.slf4j-version>1.5.10</org.slf4j-version>
-		<org.apache.shiro-version>1.1.0</org.apache.shiro-version>
+		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.mybatis-version>3.1.1</org.mybatis-version>
+		<log4j-version>1.2.17</log4j-version>
+		<org.apache.shiro-version>1.2.1</org.apache.shiro-version>
 	</properties>
 
 	<dependencyManagement>
@@ -46,7 +49,7 @@
 			<dependency>
 				<groupId>log4j</groupId>
 				<artifactId>log4j</artifactId>
-				<version>1.2.15</version>
+				<version>${log4j-version}</version>
 				<exclusions>
 					<exclusion>
 						<groupId>javax.mail</groupId>
@@ -78,19 +81,19 @@
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis</artifactId>
-				<version>3.0.6</version>
+				<version>${org.mybatis-version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>org.mybatis</groupId>
 				<artifactId>mybatis-spring</artifactId>
-				<version>1.0.2</version>
+				<version>1.1.1</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>12.0</version>
+				<version>13.0</version>
 			</dependency>
 
 			<dependency>

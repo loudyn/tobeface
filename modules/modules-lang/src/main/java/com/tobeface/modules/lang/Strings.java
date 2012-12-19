@@ -11,23 +11,23 @@ public final class Strings {
 
 	/**
 	 * 
-	 * @param s
+	 * @param text
 	 * @return
 	 */
-	public static String capitalize(String s) {
-		if (null == s) {
+	public static String capitalize(String text) {
+		if (null == text) {
 			return null;
 		}
-		if (s.length() == 0) {
+		if (text.length() == 0) {
 			return "";
 		}
 
-		char char0 = s.charAt(0);
+		char char0 = text.charAt(0);
 		if (Character.isUpperCase(char0)) {
-			return s.toString();
+			return text.toString();
 		}
 
-		return new StringBuilder(s.length()).append(Character.toUpperCase(char0)).append(s.subSequence(1, s.length())).toString();
+		return new StringBuilder(text.length()).append(Character.toUpperCase(char0)).append(text.subSequence(1, text.length())).toString();
 	}
 
 	/**
@@ -200,7 +200,7 @@ public final class Strings {
 		Preconditions.isTrue(
 								size == longSize,
 								new ArrayIndexOutOfBoundsException("Required array size too large: " + String.valueOf(longSize))
-				);
+							);
 
 		final char[] array = new char[size];
 		text.getChars(0, len, array, 0);
