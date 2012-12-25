@@ -1,6 +1,7 @@
 package com.tobeface.modules.lang;
 
 import java.util.Iterator;
+import java.util.Locale;
 
 /**
  * 
@@ -107,6 +108,73 @@ public final class Strings {
 
 	/**
 	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String lowerCase(String text) {
+		if ((isEmpty(text))) {
+			return text;
+		}
+
+		return text.toLowerCase();
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @param locale
+	 * @return
+	 */
+	public static String lowerCase(String text, Locale locale) {
+		if (isEmpty(text)) {
+			return text;
+		}
+
+		return text.toLowerCase(locale);
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String upperCase(String text) {
+		if (isEmpty(text)) {
+			return text;
+		}
+
+		return text.toUpperCase();
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @param locale
+	 * @return
+	 */
+	public static String upperCase(String text, Locale locale) {
+		if (isEmpty(text)) {
+			return text;
+		}
+
+		return text.toUpperCase(locale);
+	}
+
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String trim(String text) {
+		if (isEmpty(text)) {
+			return text;
+		}
+
+		return text.trim();
+	}
+
+	/**
+	 * 
 	 * @param it
 	 * @param delimiter
 	 * @return
@@ -198,9 +266,9 @@ public final class Strings {
 		long longSize = (long) len * (long) count;
 		int size = (int) longSize;
 		Preconditions.isTrue(
-								size == longSize,
-								new ArrayIndexOutOfBoundsException("Required array size too large: " + String.valueOf(longSize))
-							);
+				size == longSize,
+				new ArrayIndexOutOfBoundsException("Required array size too large: " + String.valueOf(longSize))
+				);
 
 		final char[] array = new char[size];
 		text.getChars(0, len, array, 0);

@@ -1,4 +1,4 @@
-package com.tobeface.modules.table.annotations;
+package com.tobeface.modules.table.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -10,19 +10,19 @@ import java.lang.annotation.Target;
  * @author loudyn
  * 
  */
-@Target(ElementType.FIELD)
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TableField {
+public @interface TableValueConverter {
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Class<?> type();
 
 	/**
 	 * 
 	 * @return
 	 */
-	public String columnName() default "A";
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int columnIndex() default 0;
+	public String method();
 }

@@ -3,8 +3,8 @@ package com.tobeface.modules.table;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.tobeface.modules.lang.Ghost;
-import com.tobeface.modules.table.annotations.TableValueConverter;
-import com.tobeface.modules.table.annotations.TableValueConverters;
+import com.tobeface.modules.table.annotation.TableValueConverter;
+import com.tobeface.modules.table.annotation.TableValueConverters;
 
 /**
  * 

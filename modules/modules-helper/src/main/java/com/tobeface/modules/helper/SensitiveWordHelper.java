@@ -17,7 +17,7 @@ import com.tobeface.modules.lang.Patterns;
  * @author loudyn
  * 
  */
-public class WordHelper {
+public class SensitiveWordHelper {
 	
 	private WordNode rootWordNode = new WordNode(null, 'R', WordNode.MIDSIDE_TYPE);
 
@@ -26,7 +26,7 @@ public class WordHelper {
 	 * @param word
 	 * @return
 	 */
-	public final WordHelper add(String word) {
+	public final SensitiveWordHelper add(String word) {
 
 		char[] chars = word.toCharArray();
 		if (chars.length > 0) {
@@ -41,7 +41,7 @@ public class WordHelper {
 	 * @param word
 	 * @return
 	 */
-	public final WordHelper remove(String word) {
+	public final SensitiveWordHelper remove(String word) {
 
 		char[] chars = word.toCharArray();
 		if (chars.length > 0) {
@@ -80,7 +80,7 @@ public class WordHelper {
 	 * @param words
 	 * @return
 	 */
-	public final WordHelper addAll(Collection<String> words) {
+	public final SensitiveWordHelper addAll(Collection<String> words) {
 		for (String word : words) {
 			add(word);
 		}
@@ -92,7 +92,7 @@ public class WordHelper {
 	 * @param words
 	 * @return
 	 */
-	public final WordHelper removeAll(Collection<String> words) {
+	public final SensitiveWordHelper removeAll(Collection<String> words) {
 		for (String word : words) {
 			remove(word);
 		}
@@ -103,7 +103,7 @@ public class WordHelper {
 	 * 
 	 * @return
 	 */
-	public final WordHelper reset() {
+	public final SensitiveWordHelper reset() {
 
 		destroyFilterWordTree(rootWordNode);
 		rootWordNode = new WordNode(null, 'R', WordNode.MIDSIDE_TYPE);
@@ -115,7 +115,7 @@ public class WordHelper {
 	 * @param wordnode
 	 * @return
 	 */
-	private WordHelper destroyFilterWordTree(WordNode wordnode) {
+	private SensitiveWordHelper destroyFilterWordTree(WordNode wordnode) {
 
 		if (null != wordnode.children && !wordnode.children.isEmpty()) {
 			for (WordNode node : wordnode.children) {
@@ -311,7 +311,7 @@ public class WordHelper {
 		sort(hitWords, WORD_COMPARATOR);
 
 		for (String foundWord : hitWords) {
-			text = text.replaceAll("(?iu)" + Patterns.quoteReplace(foundWord), replacement);
+			text = text.replaceAll("(?iu)" + Patterns.quotesReplace(foundWord), replacement);
 		}
 		return text;
 	}

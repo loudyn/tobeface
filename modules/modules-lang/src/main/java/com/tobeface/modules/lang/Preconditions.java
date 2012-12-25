@@ -234,16 +234,6 @@ public final class Preconditions {
 	public static void isAssignable(Class<?> superType, Class<?> subType) {
 		isAssignable(superType, subType, "");
 	}
-
-	public static void state(boolean expression, String message) {
-		if (!expression) {
-			throw new IllegalStateException(message);
-		}
-	}
-
-	public static void state(boolean expression) {
-		state(expression, "[Assertion failed] - this state invariant must be true");
-	}
-
+	
 	private Preconditions() {}
 }

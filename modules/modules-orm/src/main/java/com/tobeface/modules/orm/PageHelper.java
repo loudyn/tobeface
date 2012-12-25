@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang.StringUtils;
 
 import com.tobeface.modules.domain.Page;
-import com.tobeface.modules.helper.WordHelper;
+import com.tobeface.modules.helper.SensitiveWordHelper;
 import com.tobeface.modules.lang.Preconditions;
 
 /**
@@ -25,7 +25,7 @@ public class PageHelper {
 	private static final int SELECT_ITEMS_GROUP = 2;
 
 	private static final String[] SQL_META = new String[] { " ", "'", "select", "or", "and", "union", "exec", "-- ", "#", ";" };
-	private static final WordHelper SQL_SAFE_GUARDER = new WordHelper() {
+	private static final SensitiveWordHelper SQL_SAFE_GUARDER = new SensitiveWordHelper() {
 		{
 			addAll(Arrays.asList(SQL_META));
 		}
@@ -136,8 +136,8 @@ public class PageHelper {
 	 * @return
 	 */
 	private static String buildCountSql(String sql) {
-		String fromHql = buildFromSql(sql);
-		return String.format("select count(*) %s", fromHql);
+		String fromSql = buildFromSql(sql);
+		return String.format("select count(*) %s", fromSql);
 	}
 
 	/**

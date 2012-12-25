@@ -1,4 +1,4 @@
-package com.tobeface.modules.lang.annotations;
+package com.tobeface.modules.lang.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

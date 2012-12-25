@@ -2,7 +2,6 @@ package com.tobeface.modules.domain;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,7 @@ public class Page<T> implements Serializable {
 	private String order;
 	private long totalCount = -1;
 
-	private List<T> result = Collections.emptyList();
+	private List<T> result;
 	private Map<String, Object> params = new HashMap<String, Object>();
 
 	public int getPageNo() {

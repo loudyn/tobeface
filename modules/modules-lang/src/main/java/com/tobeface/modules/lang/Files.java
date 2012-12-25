@@ -6,6 +6,8 @@ import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -39,16 +41,13 @@ public final class Files {
 			throw new IllegalStateException("file is not exist or can not read!");
 		}
 
-		ByteArrayOutputStream out = null;
 		try {
 
-			out = new ByteArrayOutputStream();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			new WriteFileToCommand(file, out, true).execute();
 			return out.toByteArray();
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
-		} finally {
-			IOs.freeQuietly(out);
 		}
 	}
 
@@ -60,6 +59,7 @@ public final class Files {
 	 */
 	public static String read(File file, String encoding) {
 		try {
+			
 			return new String(read(file), encoding);
 		} catch (UnsupportedEncodingException e) {
 			throw Lang.uncheck(e);
@@ -297,6 +297,14 @@ public final class Files {
 	public static String home() {
 		return System.getProperty("user.path");
 	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public static String line() {
+		return System.getProperty("line.seperator");
+	}
 
 	/**
 	 * 
@@ -305,6 +313,7 @@ public final class Files {
 	 */
 	public static String canonical(File file) {
 		try {
+			
 			return file.getCanonicalPath();
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
@@ -434,6 +443,9 @@ public final class Files {
 	 * @return
 	 */
 	public static String asPath(String packageName) {
+		if (Strings.isBlank(packageName)) {
+			return packageName;
+		}
 		return packageName.replaceAll("\\.", "/");
 	}
 
@@ -443,18 +455,29 @@ public final class Files {
 	 * @return
 	 */
 	public static FileType guessType(byte[] bytes) {
-		Preconditions.isTrue(bytes.length >= 32);
-		String hexHeader = fileHexHeader(bytes);
-		for (FileType type : FileType.values()) {
 
-			if (hexHeader.startsWith(type.getHexHeader())) {
-				return type;
+		Preconditions.isTrue(null != bytes);
+		Preconditions.isTrue(bytes.length >= 32);
+
+		final String hexHeader = fileHexHeader(bytes);
+		Iterator<FileType> filter = Lang.filter(Arrays.asList(FileType.values()).iterator(), new Predicate<FileType>() {
+
+			@Override
+			public boolean apply(FileType input) {
+				return hexHeader.startsWith(input.getHex());
 			}
-		}
-		return null;
+
+		});
+
+		return filter.hasNext() ? filter.next() : null;
 	}
 
-	private static final char[] DIGITS_UPPER = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
+	private static final char[] DIGITS_UPPER = { 
+												'0', '1', '2', '3', 
+												'4', '5', '6', '7', 
+												'8', '9', 'A', 'B', 
+												'C', 'D', 'E', 'F' 
+											};
 
 	private static String fileHexHeader(byte[] bytes) {
 		int length = 32;
@@ -467,32 +490,38 @@ public final class Files {
 		return new String(out);
 	}
 
+	/**
+	 * 
+	 * @author loudyn
+	 *
+	 */
 	public static enum FileType {
-		JPG("jpg", "FFD8FF"), 
-		ICO("ico", "00000100"), 
-		BMP("bmp", "424D"), 
-		GIF("gif", "47494638"), 
+		
+		JPG("jpg", "FFD8FF"),
+		ICO("ico", "00000100"),
+		BMP("bmp", "424D"),
+		GIF("gif", "47494638"),
 		PNG("png", "89504E47"),
-		ZIP("zip", "504B0304"), 
+		ZIP("zip", "504B0304"),
 		RAR("rar", "52617221"),
-		PDF("pdf", "25504446"), 
-		DOC_OR_XLS_OR_PPT("doc;xls;ppt", "D0CF11E0"), 
-		DOCX("docx", "504B0304");
+		PDF("pdf", "25504446"),
+		DOCX("docx", "504B0304"),
+		DOC_OR_XLS_OR_PPT("doc;xls;ppt", "D0CF11E0");
 
 		private final String name;
-		private final String hexHeader;
+		private final String hex;
 
-		private FileType(String name, String hexHeader) {
+		private FileType(String name, String hex) {
 			this.name = name;
-			this.hexHeader = hexHeader;
+			this.hex = hex;
 		}
 
 		public String getName() {
 			return name;
 		}
 
-		public String getHexHeader() {
-			return hexHeader;
+		public String getHex() {
+			return hex;
 		}
 
 	}

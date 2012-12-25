@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.tobeface.modules.lang.Ghost;
-import com.tobeface.modules.table.annotations.TableField;
+import com.tobeface.modules.table.annotation.TableField;
 
 /**
  * 

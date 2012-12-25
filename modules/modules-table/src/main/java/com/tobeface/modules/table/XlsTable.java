@@ -21,8 +21,8 @@ import com.tobeface.modules.lang.Ghost;
 import com.tobeface.modules.lang.IOs;
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.Preconditions;
-import com.tobeface.modules.table.annotations.TableField;
-import com.tobeface.modules.table.annotations.TableValueConverters;
+import com.tobeface.modules.table.annotation.TableField;
+import com.tobeface.modules.table.annotation.TableValueConverters;
 
 /**
  * 

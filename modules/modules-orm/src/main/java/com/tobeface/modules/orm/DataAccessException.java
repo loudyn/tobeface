@@ -15,6 +15,10 @@ public class DataAccessException extends RuntimeException {
 		super(message);
 	}
 
+	/**
+	 * 
+	 * @param cause
+	 */
 	public DataAccessException(Throwable cause) {
 		super(cause);
 	}
