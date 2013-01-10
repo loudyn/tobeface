@@ -5,7 +5,7 @@ package com.tobeface.modules.domain;
  *
  * @param <T>
  */
-public interface DomainObject<T> {
+public interface DomainObj<T> {
 	/**
 	 * 
 	 * @param other

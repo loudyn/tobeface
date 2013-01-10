@@ -10,7 +10,7 @@ import com.tobeface.modules.lang.Lang;
 /**
  * @author loudyn
  */
-public class JsonHelper {
+public final class JsonHelper {
 	private final static ObjectMapper MAPPER = new ObjectMapper();
 
 	static {

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>com.tobeface</groupId>
 		<artifactId>modules</artifactId>
-		<version>0.0.1</version>
+		<version>0.0.2</version>
 	</parent>
 	<artifactId>modules-lang</artifactId>
 	<packaging>jar</packaging>
@@ -23,10 +23,24 @@
 
 	<build>
 		<plugins>
+	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
+	<organization>
+		<name>tobeface.com</name>
+		<url>tobeface.com</url>
+	</organization>
 </project>

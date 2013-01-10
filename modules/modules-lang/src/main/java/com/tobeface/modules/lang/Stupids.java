@@ -18,8 +18,8 @@ public final class Stupids {
 	 * @param clazz
 	 * @return
 	 */
-	public static boolean isCareless(Class<?> clazz) {
-		return isCareless(Files.asPath(clazz.getName() + ".class"));
+	public static boolean isStupid(Class<?> clazz) {
+		return isStupid(Files.asPath(clazz.getName() + ".class"));
 	}
 
 	/**
@@ -27,7 +27,7 @@ public final class Stupids {
 	 * @param path
 	 * @return
 	 */
-	public static boolean isCareless(String path) {
+	public static boolean isStupid(String path) {
 
 		try {
 

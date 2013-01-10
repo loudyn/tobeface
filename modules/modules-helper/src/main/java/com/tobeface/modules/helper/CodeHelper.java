@@ -17,7 +17,7 @@ import com.tobeface.modules.lang.Preconditions;
  * @author loudyn
  * 
  */
-public abstract class CodeHelper {
+public final class CodeHelper {
 
 	private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 	private static final String DEFAULT_URL_ENCODING = "UTF-8";

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.tobeface</groupId>
 	<artifactId>modules</artifactId>
-	<version>0.0.1</version>
+	<version>0.0.2</version>
 	<packaging>pom</packaging>
 	<modules>
 		<module>modules-lang</module>
@@ -14,6 +14,7 @@
 		<module>modules-orm</module>
 		<module>modules-table</module>
 		<module>modules-event</module>
+		<module>modules-drools</module>
 	</modules>
 
 	<properties>

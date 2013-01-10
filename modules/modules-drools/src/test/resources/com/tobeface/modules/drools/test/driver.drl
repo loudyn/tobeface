@@ -1,0 +1,10 @@
+package com.tobeface.modules.drools.test
+
+import com.tobeface.modules.drools.test.StatelessfulSessionTest.Driver;
+
+rule "can drive"
+when
+	$a : Driver(age < 18);
+then
+	$a.setCanDrive(false);
+end

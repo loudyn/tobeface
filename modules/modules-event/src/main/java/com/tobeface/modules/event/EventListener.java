@@ -11,5 +11,5 @@ public interface EventListener {
 	 * 
 	 * @param event
 	 */
-	void onApplicationEvent(Event event);
+	void onEvent(Event event);
 }

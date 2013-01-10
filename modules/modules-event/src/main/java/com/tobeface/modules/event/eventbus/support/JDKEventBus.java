@@ -97,7 +97,7 @@ public class JDKEventBus implements EventBus {
 	private void dispatch(Event event, EventListener listener, List<Throwable> throwables) {
 		try {
 
-			listener.onApplicationEvent(event);
+			listener.onEvent(event);
 		} catch (Exception e) {
 			throwables.add(e);
 		}

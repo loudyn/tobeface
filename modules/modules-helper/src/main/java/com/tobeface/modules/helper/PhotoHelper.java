@@ -27,7 +27,8 @@ import com.tobeface.modules.lang.Preconditions;
  * @author loudyn
  * 
  */
-public class PhotoHelper {
+@SuppressWarnings("restriction")
+public final class PhotoHelper {
 
 	/**
 	 * 
@@ -156,4 +157,6 @@ public class PhotoHelper {
 	public static void watermark(String dest, String watermark) {
 		watermark(new File(dest), new File(watermark));
 	}
+
+	private PhotoHelper() {}
 }

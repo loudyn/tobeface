@@ -48,7 +48,7 @@ public class JDKAsyncEventBus extends JDKEventBus {
 
 			@Override
 			public void run() {
-				listener.onApplicationEvent(event);
+				listener.onEvent(event);
 			}
 		});
 	}

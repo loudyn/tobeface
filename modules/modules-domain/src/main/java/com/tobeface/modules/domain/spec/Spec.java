@@ -6,7 +6,7 @@ package com.tobeface.modules.domain.spec;
  *
  * @param <T>
  */
-public interface Specification<T> {
+public interface Spec<T> {
 	/**
 	 * 
 	 * @param entity
@@ -19,19 +19,19 @@ public interface Specification<T> {
 	 * @param another
 	 * @return
 	 */
-	Specification<T> and(Specification<T> another);
+	Spec<T> and(Spec<T> another);
 
 	/**
 	 * 
 	 * @param another
 	 * @return
 	 */
-	Specification<T> or(Specification<T> another);
+	Spec<T> or(Spec<T> another);
 
 	/**
 	 * 
 	 * @param another
 	 * @return
 	 */
-	Specification<T> not(Specification<T> another);
+	Spec<T> not(Spec<T> another);
 }

@@ -37,13 +37,39 @@ public final class Patterns {
 
 		return false;
 	}
+	
+	/**
+	 * 
+	 * @param text
+	 * @return
+	 */
+	public static String noQuotes(String text) {
+		if (Strings.isBlank(text)) {
+			return text;
+		}
+
+		StringBuilder result = new StringBuilder();
+		char[] chars = text.toCharArray();
+		int length = chars.length;
+
+		for (int i = 0; i < length; i++) {
+			char c = chars[i];
+			if (QUOTES.contains(c)) {
+				result.append("\\");
+			}
+
+			result.append(c);
+		}
+
+		return result.toString();
+	}
 
 	/**
 	 * 
 	 * @param text
 	 * @return
 	 */
-	public static String quotesReplace(String text) {
+	public static String salfQuotes(String text) {
 		if (Strings.isBlank(text)) {
 			return text;
 		}
@@ -70,7 +96,7 @@ public final class Patterns {
 	 * @return
 	 */
 	public static String contains(String string) {
-		return String.format(".*?%s.*?", quotesReplace(string));
+		return String.format(".*?%s.*?", salfQuotes(string));
 	}
 
 	/**
@@ -79,7 +105,7 @@ public final class Patterns {
 	 * @return
 	 */
 	public static String startWith(String string) {
-		return String.format("^%s", quotesReplace(string));
+		return String.format("^%s", salfQuotes(string));
 	}
 
 	/**
@@ -88,7 +114,7 @@ public final class Patterns {
 	 * @return
 	 */
 	public static String endWith(String string) {
-		return String.format("%s$", quotesReplace(string));
+		return String.format("%s$", salfQuotes(string));
 	}
 
 	/**

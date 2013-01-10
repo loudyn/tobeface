@@ -1,16 +1,16 @@
 package com.tobeface.modules.domain;
 
-
 /**
  * 
  * @author loudyn
- *
+ * 
  * @param <T>
  */
-public interface Duplicable<T> {
+public interface ValueObj<T> {
 	/**
 	 * 
+	 * @param other
 	 * @return
 	 */
-	T duplicate();
+	boolean sameValueAs(T other);
 }

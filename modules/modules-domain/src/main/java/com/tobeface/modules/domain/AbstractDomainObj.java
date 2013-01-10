@@ -13,7 +13,7 @@ import com.tobeface.modules.lang.Strings;
  * @param <ID>
  */
 @SuppressWarnings("serial")
-public abstract class AbstractDomain implements DomainObject<AbstractDomain>, Serializable {
+public abstract class AbstractDomainObj implements DomainObj<AbstractDomainObj>, Serializable {
 
 	private String id;
 
@@ -29,9 +29,13 @@ public abstract class AbstractDomain implements DomainObject<AbstractDomain>, Se
 		return !Strings.isBlank(getId());
 	}
 
-	public boolean sameIdentityAs(AbstractDomain other) {
+	public boolean sameIdentityAs(AbstractDomainObj other) {
 		if (null == other) {
 			return false;
+		}
+
+		if (this == other) {
+			return true;
 		}
 
 		return new EqualsBuilder().append(this.getId(), other.getId()).isEquals();
