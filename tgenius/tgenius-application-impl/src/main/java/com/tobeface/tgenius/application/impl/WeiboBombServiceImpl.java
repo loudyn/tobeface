@@ -3,6 +3,7 @@ package com.tobeface.tgenius.application.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.tobeface.modules.lang.Preconditions;
@@ -22,6 +23,7 @@ import com.tobeface.tgenius.domain.appkey.WeiboAppKey;
 public class WeiboBombServiceImpl implements WeiboBombService {
 
 	@Autowired
+	@Qualifier(PlatformRoutingWeiboApiService.BEAN_NAME)
 	private WeiboApiService weiboApiService;
 
 	@Autowired

@@ -35,11 +35,7 @@ public final class Lookups {
 
 		ServiceLoader<T> loader = ServiceLoader.load(clz, clzLoader);
 		Iterator<T> it = loader.iterator();
-		if (it.hasNext()) {
-			return it.next();
-		}
-
-		return null;
+		return it.hasNext() ? it.next() : null;
 	}
 
 	/**
@@ -110,10 +106,6 @@ public final class Lookups {
 			}
 
 			int end = filepath.lastIndexOf(".");
-			if (end == -1) {
-				throw Lang.impossiable();
-			}
-
 			String clazzName = Files.asPackage(filepath.substring(index, end));
 			try {
 

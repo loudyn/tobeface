@@ -62,24 +62,24 @@
 		<property name="dataSource" ref="datasource" />
 	</bean>
 	
-  <tx:advice id="txAdvice" transaction-manager="transactionManager" >
-    <tx:attributes>
-      <tx:method name="save*" propagation="REQUIRED" read-only="false" />
-      <tx:method name="update*" propagation="REQUIRED" read-only="false" />
-      <tx:method name="delete*" propagation="REQUIRED" read-only="false" />	
-      <tx:method name="*" propagation="SUPPORTS" read-only="true"/>
-    </tx:attributes>
-  </tx:advice>
+  	<tx:advice id="txAdvice" transaction-manager="transactionManager" >
+    	<tx:attributes>
+      	<tx:method name="save*" propagation="REQUIRED" read-only="false" />
+      	<tx:method name="update*" propagation="REQUIRED" read-only="false" />
+      	<tx:method name="delete*" propagation="REQUIRED" read-only="false" />	
+      	<tx:method name="*" propagation="SUPPORTS" read-only="true"/>
+    	</tx:attributes>
+  	</tx:advice>
   
-  <aop:config>    
-    <aop:pointcut id="txPointcut" expression="execution(* com.tobeface.tgenius.application..*.*(..))" /> <!--把事务控制在Service层-->
-    <aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" order="99" />
-  </aop:config>
-	
-	<aop:aspectj-autoproxy />
+ 	<aop:config>    
+    	<aop:pointcut id="txPointcut" expression="execution(* com.tobeface.tgenius.application..*.*(..))" /> <!--把事务控制在Service层-->
+    	<aop:advisor pointcut-ref="txPointcut" advice-ref="txAdvice" order="99" />
+  	</aop:config>
 	
 	<tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
-	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true"/>
+	<aop:aspectj-autoproxy />
 	
 	<import resource="classpath:/META-INF/spring/application-infrastructure.xml"/>
+	<import resource="classpath:/META-INF/spring/application-application.xml"/>
+	<import resource="classpath:/META-INF/spring/application-application-task.xml"/>
 </beans>

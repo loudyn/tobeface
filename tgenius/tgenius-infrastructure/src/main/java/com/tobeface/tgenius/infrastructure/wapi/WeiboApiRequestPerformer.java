@@ -1,6 +1,7 @@
 package com.tobeface.tgenius.infrastructure.wapi;
 
 import java.io.IOException;
+import java.net.ProxySelector;
 import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -16,6 +17,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -25,7 +27,9 @@ import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.impl.conn.ProxySelectorRoutePlanner;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
@@ -45,6 +49,7 @@ import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategy
 final class WeiboApiRequestPerformer {
 
 	private static PoolingClientConnectionManager connectionManager;
+	private static ProxySelectorRoutePlanner proxySelectorRoutePlanner;
 	static {
 
 		try {
@@ -74,6 +79,8 @@ final class WeiboApiRequestPerformer {
 			connectionManager = new PoolingClientConnectionManager(registry);
 			connectionManager.setMaxTotal(200);
 			connectionManager.setDefaultMaxPerRoute(100);
+
+			proxySelectorRoutePlanner = new ProxySelectorRoutePlanner(connectionManager.getSchemeRegistry(), ProxySelector.getDefault());
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
 		}
@@ -95,7 +102,7 @@ final class WeiboApiRequestPerformer {
 		HttpEntity entity = null;
 		try {
 
-			HttpClient client = new DefaultHttpClient(connectionManager);
+			HttpClient client = createHttpClient();
 			client.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 3000);
 			client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 3000);
 
@@ -134,6 +141,22 @@ final class WeiboApiRequestPerformer {
 		} catch (Exception e) {
 			throw Lang.uncheck(e);
 		}
+	}
+
+	private static HttpClient createHttpClient() {
+		DefaultHttpClient client = new DefaultHttpClient(connectionManager);
+		configHttpRetryHandler(client);
+		configHttpProxy(client);
+		return client;
+	}
+
+	private static void configHttpRetryHandler(DefaultHttpClient client) {
+		HttpRequestRetryHandler handler = new DefaultHttpRequestRetryHandler(3, false);
+		client.setHttpRequestRetryHandler(handler);
+	}
+	
+	private static void configHttpProxy(DefaultHttpClient client) {
+		client.setRoutePlanner(proxySelectorRoutePlanner);	
 	}
 
 	private WeiboApiRequestPerformer() {}

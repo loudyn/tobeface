@@ -2,9 +2,12 @@ package com.tobeface.modules.domain;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.builder.EqualsBuilder;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Version;
 
-import com.tobeface.modules.lang.Strings;
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
 
 /**
  * 
@@ -13,23 +16,54 @@ import com.tobeface.modules.lang.Strings;
  * @param <ID>
  */
 @SuppressWarnings("serial")
-public abstract class AbstractDomainObj implements DomainObj<AbstractDomainObj>, Serializable {
+@MappedSuperclass
+public abstract class AbstractDomainObj<ID, T> implements DomainObj<T>, Serializable {
 
-	private String id;
+	@Id
+	private ID id;
+	@Version
+	private Long version;
 
-	public String getId() {
+	public ID getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(ID id) {
 		this.id = id;
 	}
 
-	public boolean hasIdentity() {
-		return !Strings.isBlank(getId());
+	public Long getVersion() {
+		return version;
 	}
 
-	public boolean sameIdentityAs(AbstractDomainObj other) {
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public final boolean equals(Object obj) {
+
+		if (null == obj || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		T other = (T) obj;
+		return sameIdentityAs(other);
+	}
+
+	@Override
+	public final int hashCode() {
+		return new HashCodeBuilder().append(getId()).append(getVersion()).toHashCode();
+	}
+
+	public boolean hasIdentity() {
+		return null != getId();
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public final boolean sameIdentityAs(T other) {
 		if (null == other) {
 			return false;
 		}
@@ -38,6 +72,7 @@ public abstract class AbstractDomainObj implements DomainObj<AbstractDomainObj>,
 			return true;
 		}
 
-		return new EqualsBuilder().append(this.getId(), other.getId()).isEquals();
+		AbstractDomainObj another = (AbstractDomainObj) other;
+		return new EqualsBuilder().append(getId(), another.getId()).append(getVersion(), another.getVersion()).isEquals();
 	}
 }

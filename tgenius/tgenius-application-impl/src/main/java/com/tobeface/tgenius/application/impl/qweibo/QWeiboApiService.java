@@ -12,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -42,7 +41,6 @@ import com.tobeface.tgenius.infrastructure.wapi.support.BulkLazyWeiboApiRequestI
  * @author loudyn
  * 
  */
-@Service
 public class QWeiboApiService implements WeiboApiService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());

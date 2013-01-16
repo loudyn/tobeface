@@ -311,7 +311,7 @@ public class SensitiveWordHelper {
 		sort(hitWords, WORD_COMPARATOR);
 
 		for (String foundWord : hitWords) {
-			text = text.replaceAll("(?iu)" + Patterns.salfQuotes(foundWord), replacement);
+			text = text.replaceAll("(?iu)" + Patterns.safeQuotes(foundWord), replacement);
 		}
 		return text;
 	}
