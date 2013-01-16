@@ -1,0 +1,6 @@
+/tgenius-application/target
+/tgenius-application-impl/target
+/tgenius-infrastructure/target
+/tgenius-domain/target
+/tgenius-web/target
+/logs

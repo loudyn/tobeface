@@ -1,7 +1,6 @@
 package com.tobeface.tgenius.infrastructure.wapi.exception;
 
 
-
 /**
  * 
  * @author loudyn
@@ -62,10 +61,11 @@ public final class WeiboApiExceptions {
 
 	/**
 	 * 
+	 * @param e
 	 * @return
 	 */
-	public static WeiboApiException newServiceUnavaliable() {
-		return new ServiceUnavaliableWeiboApiException();
+	public static WeiboApiException newServiceUnavaliable(Exception e) {
+		return new ServiceUnavaliableWeiboApiException(e);
 	}
 
 	/**
@@ -76,6 +76,41 @@ public final class WeiboApiExceptions {
 	public static boolean isServiceUnavaliable(Exception e) {
 		return e instanceof ServiceUnavaliableWeiboApiException;
 	}
-	
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static WeiboApiException newInternalServiceUnavaliable() {
+		return new InternalServiceUnavaliableWeiboApiException();
+	}
+
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public static boolean isInternalServiceUnavaliable(Exception e) {
+		return e instanceof InternalServiceUnavaliableWeiboApiException;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public static WeiboApiException newWeiboApiException() {
+		return new WeiboApiException();
+	}
+
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public static WeiboApiException newWeiboApiException(Exception e) {
+		return new WeiboApiException(e);
+	}
+
 	private WeiboApiExceptions() {}
+
 }

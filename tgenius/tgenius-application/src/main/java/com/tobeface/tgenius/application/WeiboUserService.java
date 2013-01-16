@@ -3,6 +3,7 @@ package com.tobeface.tgenius.application;
 import java.util.List;
 
 import com.tobeface.modules.domain.Page;
+import com.tobeface.tgenius.domain.WeiboPlatform;
 import com.tobeface.tgenius.domain.WeiboUser;
 
 /**
@@ -28,23 +29,17 @@ public interface WeiboUserService {
 
 	/**
 	 * 
+	 * @param platform
 	 * @param name
-	 * @return
 	 */
-	WeiboUser queryUniqueByName(String name);
-
-	/**
-	 * 
-	 * @param which
-	 */
-	void deleteByName(String which);
+	void deleteByPlatformAndName(WeiboPlatform platform, String name);
 
 	/**
 	 * 
 	 * @param name
 	 * @return
 	 */
-	boolean existsByName(String name);
+	boolean existsByPlatformAndName(WeiboPlatform platform, String name);
 
 	/**
 	 * 

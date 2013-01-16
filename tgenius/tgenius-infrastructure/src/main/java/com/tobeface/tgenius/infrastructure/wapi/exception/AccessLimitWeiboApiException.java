@@ -2,6 +2,7 @@ package com.tobeface.tgenius.infrastructure.wapi.exception;
 
 
 
+
 /**
  * 
  * @author loudyn

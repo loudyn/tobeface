@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tobeface.tgenius.domain.appkey.WeiboAppKey">
+
+<resultMap type="WeiboAppKey" id="weiboAppKeyResult">
+	<id property="apiKey" column="api_key"/>
+	<result property="apiSecret" column="api_secret"/>
+	<result property="accessToken" column="access_token"/>
+	<result property="callbackUrl" column="callback_url"/>
+	<result property="authorizationUrl" column="authorization_url"/>
+	<result property="refreshAccessTokenUrl" column="refresh_access_token_url"/>
+	<result property="otherParams" column="other_params"/>
+	<result property="platform" column="platform"/>
+	<result property="enablePrivateLetter" column="enable_private_letter"/>
+</resultMap>
+
+<sql id="commonSelect">
+	select 
+		self.*
+	from weibo_app_key self 
+</sql>
+
+<insert id="save" keyProperty="apiKey" >
+	insert into weibo_app_key(api_key,api_secret,access_token,callback_url,authorization_url,refresh_access_token_url,other_params,platform,enable_private_letter) 
+			values(#{apiKey},#{apiSecret},#{accessToken},#{callbackUrl},#{authorizationUrl},#{refreshAccessTokenUrl},#{otherParams},#{platform},#{enablePrivateLetter})				
+</insert>
+<update id="update" >
+	update weibo_app_key 
+			set api_secret=#{apiSecret},access_token=#{accessToken},callback_url=#{callbackUrl},authorization_url=#{authorizationUrl},refresh_access_token_url=#{refreshAccessTokenUrl},other_params=#{otherParams},platform=#{platform},enable_private_letter=#{enablePrivateLetter} where api_key=#{apiKey}
+</update>
+
+<delete id="delete" >
+	delete from weibo_app_key where api_key=#{id}
+</delete>
+
+<delete id="deleteByApiKey" >
+	delete from weibo_app_key where api_key=#{id}
+</delete>
+
+<select id="get" resultMap="weiboAppKeyResult">
+	<include refid="commonSelect"/>
+	where self.api_key=#{id}
+</select>
+
+<select id="query" resultMap="weiboAppKeyResult">
+	<include refid="commonSelect"/>
+	<where>
+		<if test="platform != null">
+			self.platform=#{platform}
+		</if>
+		<if test="enablePrivateLetter != null">
+			and self.enable_private_letter=#{enablePrivateLetter}
+		</if>
+	</where>
+</select>
+
+<select id="queryPage" resultMap="weiboAppKeyResult">
+	<include refid="commonSelect"/>
+</select>
+</mapper>

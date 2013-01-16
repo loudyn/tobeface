@@ -5,6 +5,7 @@
 
 <resultMap type="WeiboUser" id="weiboUserResult">
 	<id property="name" column="name"/>
+	<result property="platform" column="platform"/>
 	<result property="nickname" column="nickname"/>
 	<result property="location" column="location"/>
 	<result property="homepage" column="homepage"/>
@@ -21,6 +22,7 @@
 <sql id="commonSelect">
 	select 
 		self.name as name,
+		self.platform as platform,
 		self.nickname as nickname,
 		self.location as location,
 		self.homepage as homepage,
@@ -42,8 +44,8 @@
 
 <insert id="save" keyProperty="name" >
 	insert into 
-		weibo_user(name,nickname,location,homepage,careercode,careername,sex,birth_year,fans_count,is_vip,verify_info,is_enterprise,is_realname,json) 
-	values(#{entity.name},#{entity.nickname},#{entity.location},#{entity.homepage},#{entity.careercode},(select name from weibo_career where id=#{entity.careercode}),
+		weibo_user(name,platform,nickname,location,homepage,careercode,careername,sex,birth_year,fans_count,is_vip,verify_info,is_enterprise,is_realname,json) 
+	values(#{entity.name},#{entity.platform},#{entity.nickname},#{entity.location},#{entity.homepage},#{entity.careercode},(select name from weibo_career where id=#{entity.careercode}),
 			#{entity.sex},#{entity.birthYear},#{entity.fansCount},#{entity.isVip},#{entity.verifyInfo},#{entity.isEnterprise},#{entity.isRealname},#{json})				
 </insert>
 
@@ -51,25 +53,28 @@
 	update weibo_user 
 	set nickname=#{entity.nickname},location=#{entity.location},homepage=#{entity.homepage},careercode=#{entity.careercode},careername=(select name from weibo_career where id=#{entity.careercode}),
 		sex=#{entity.sex},birth_year=#{entity.birthYear},fans_count=#{entity.fansCount},is_vip=#{entity.isVip},verify_info=#{entity.verifyInfo},
-		is_enterprise=#{entity.isEnterprise},is_realname=#{entity.isRealname},json=#{json} where name=#{entity.name}
+		is_enterprise=#{entity.isEnterprise},is_realname=#{entity.isRealname},json=#{json} where platform=#{entity.platform} and name=#{entity.name}
 </update>
 
-<delete id="deleteByName" >
-	delete from weibo_user where name=#{name}
+<delete id="deleteByPlatformAndName" >
+	delete from weibo_user where platform=#{platform} and name=#{name}
 </delete>
 
-<select id="queryUniqueByName" resultType="hashmap">
-	<include refid="jsonSelect"/>
-	where self.name=#{name} 
-</select>
-
-<select id="existsByName" resultType="boolean">
-	select 1 from weibo_user where name=#{name}
+<select id="existsByPlatformAndName" resultType="boolean">
+	select 1 from weibo_user where platform=#{platform} and name=#{name}
 </select>
 
 <select id="query" resultMap="weiboUserResult">
 	<include refid="commonSelect"/>
 	<where>
+		<choose>
+			<when test="platform != null and platform != ''">
+				self.platform=#{platform} 
+			</when>
+			<otherwise>
+				self.platform in ('QWEIBO', 'SINA', 'SOHU','NETEASE') 
+			</otherwise>
+		</choose>
 		<choose>
 			<when test="sex != null and sex != ''">
 				self.sex=#{sex} 
@@ -103,11 +108,19 @@
 	<include refid="commonSelect"/>
 	<where>
 		<choose>
-			<when test="params.sex != null and params.sex != ''">
-				self.sex=#{params.sex} 
+			<when test="params.platform != null and params.platform != ''">
+				self.platform=#{platform} 
 			</when>
 			<otherwise>
-				self.sex in (0, 1, 2) 
+				self.platform in ('QWEIBO', 'SINA', 'SOHU','NETEASE') 
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="params.sex != null and params.sex != ''">
+				and self.sex=#{params.sex} 
+			</when>
+			<otherwise>
+				and self.sex in (0, 1, 2) 
 			</otherwise>
 		</choose>
 		<choose>

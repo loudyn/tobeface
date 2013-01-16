@@ -1,0 +1,8 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Fri Jan 11 12:37:16 CST 2013
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.lastUpdated=1357879036767
+default-http\://repo.maven.apache.org/maven2/.lastUpdated=1357878825320
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.error=
+http\://repo.maven.apache.org/maven2/.error=Could not transfer artifact com.tobeface\:modules-table\:pom\:0.0.2 from/to central (http\://repo.maven.apache.org/maven2)\: Connection to http\://repo.maven.apache.org refused
+default-${local.repository.path}/.lastUpdated=1357879017892
+${local.repository.path}/.error=Could not transfer artifact com.tobeface\:modules-table\:pom\:0.0.2 from/to project-lib (${local.repository.path})\: No connector available to access repository project-lib (${local.repository.path}) of type default using the available factories AsyncRepositoryConnectorFactory, WagonRepositoryConnectorFactory

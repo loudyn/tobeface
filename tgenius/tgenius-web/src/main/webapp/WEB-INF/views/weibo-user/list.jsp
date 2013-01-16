@@ -67,7 +67,7 @@
   	<c:when test="${not empty page.result }">
   	<c:forEach items="${page.result }" var="weiboUser">
   	<tr>
-    <td style="border-left:0;"><input type="checkbox" name="items" id="checkbox" value="${weiboUser.name}"/></td>
+    <td style="border-left:0;"><input type="checkbox" name="items" id="checkbox" value="${weiboUser.platform},${weiboUser.name}"/></td>
     <td>${weiboUser.name}&nbsp;</td>
     <td>${weiboUser.nickname}&nbsp;</td>
     <td>

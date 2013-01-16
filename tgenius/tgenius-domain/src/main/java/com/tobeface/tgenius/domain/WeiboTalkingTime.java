@@ -2,14 +2,14 @@ package com.tobeface.tgenius.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-import com.tobeface.modules.domain.ValueObject;
+import com.tobeface.modules.domain.ValueObj;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public class WeiboTalkingTime implements ValueObject<WeiboTalkingTime> {
+public class WeiboTalkingTime implements ValueObj<WeiboTalkingTime> {
 
 	private long startTime = -1;
 	private long endTime = -1;

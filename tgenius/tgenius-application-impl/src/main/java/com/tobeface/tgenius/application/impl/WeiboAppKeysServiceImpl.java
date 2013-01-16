@@ -1,13 +1,17 @@
 package com.tobeface.tgenius.application.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tobeface.modules.domain.Page;
-import com.tobeface.tgenius.application.WeiboAppKeysService;
-import com.tobeface.tgenius.domain.WeiboAppKeys;
-import com.tobeface.tgenius.domain.WeiboAppKeysRepository;
+import com.tobeface.modules.lang.Preconditions;
+import com.tobeface.tgenius.application.WeiboAppKeyService;
+import com.tobeface.tgenius.domain.WeiboPlatform;
+import com.tobeface.tgenius.domain.appkey.WeiboAppKey;
+import com.tobeface.tgenius.domain.appkey.WeiboAppKeyRepository;
 
 /**
  * 
@@ -16,30 +20,41 @@ import com.tobeface.tgenius.domain.WeiboAppKeysRepository;
  */
 @Service
 @Transactional
-public class WeiboAppKeysServiceImpl implements WeiboAppKeysService {
+public class WeiboAppKeysServiceImpl implements WeiboAppKeyService {
 
 	@Autowired
-	private WeiboAppKeysRepository appKeysRepository;
+	private WeiboAppKeyRepository appKeyRepository;
 
-	public WeiboAppKeys get(String id) {
-		return appKeysRepository.get(id);
+	public WeiboAppKey get(String id) {
+		return appKeyRepository.get(id);
 	}
 
-	public void save(WeiboAppKeys entity) {
-		appKeysRepository.save(entity);
+	public void save(WeiboAppKey entity) {
+		appKeyRepository.save(entity);
 	}
 
-	public void update(WeiboAppKeys entity) {
-		appKeysRepository.update(entity);
+	public void update(WeiboAppKey entity) {
+		appKeyRepository.update(entity);
 	}
-	
+
 	public void delete(String id) {
-		appKeysRepository.delete(id);
+		appKeyRepository.delete(id);
 	}
 
 	@Override
-	public Page<WeiboAppKeys> queryPage(Page<WeiboAppKeys> page) {
-		return appKeysRepository.queryPage(page);
+	public List<WeiboAppKey> queryByPlatform(WeiboPlatform platform) {
+		Preconditions.notNull(platform);
+		return appKeyRepository.queryByPlatform(platform);
 	}
 
+	@Override
+	public List<WeiboAppKey> queryByPlatformAndEnablePrivateLetter(WeiboPlatform platform) {
+		Preconditions.notNull(platform);
+		return appKeyRepository.queryByPlatformAndEnablePrivateLetter(platform);
+	}
+
+	@Override
+	public Page<WeiboAppKey> queryPage(Page<WeiboAppKey> page) {
+		return appKeyRepository.queryPage(page);
+	}
 }

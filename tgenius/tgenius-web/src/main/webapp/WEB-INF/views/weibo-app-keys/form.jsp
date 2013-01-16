@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="${ctx }/resources/js/ueditor/themes/default/ueditor.css"/>
 </head>
 <body>
-<form:form method="post" modelAttribute="weiboAppKeys" id="form">
+<form:form method="post" modelAttribute="weiboAppKey" id="form">
 <input type="hidden" name="_method" value="${_method }" />
  <!--content start-->
 <div class="content">
@@ -19,6 +19,15 @@
 <div class="info border">
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tbody>
+<tr>
+<td width="240" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>应用App平台：</td>
+<td colspan="2">
+	<form:select path="platform">
+		<form:option value="QWEIBO">腾讯微博</form:option>
+		<form:option value="SINA">新浪微博</form:option>
+	</form:select>
+</td>
+</tr>
 <tr>
 <td width="240" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>应用App Key：</td>
 <td colspan="2">
@@ -38,9 +47,12 @@
 </td>
 </tr>
 <tr>
-<td width="240" align="right" nowrap="nowrap">Expires In：</td>
+<td width="240" align="right" nowrap="nowrap">能否发送私信：</td>
 <td colspan="2">
-	<form:input path="expiresIn" cssClass="input6 fontMar"/>
+	<form:select path="enablePrivateLetter">
+		<form:option value="1">是</form:option>
+		<form:option value="0">否</form:option>
+	</form:select>
 </td>
 </tr>
 <tr>

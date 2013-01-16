@@ -7,18 +7,25 @@
 <script src="${ctx }/resources/js/jquery-timer.js" type="text/javascript"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript">
+
+	var urlMapping = {
+					"talking" : "${ctx}/weibo-user/dig-by-talking/",
+					"keyword" : "${ctx}/weibo-user/dig-by-keyword/",
+					"tags" : "${ctx}/weibo-user/dig-by-tags/"
+	};
 	$(function(){
 		$("#commit").click(function(){
 			var $this = $(this);
-			$this.attr("disabled", true).oneTime("2s","disable",function(){
-				$this.attr("disabled",false);
+			$this.attr("disabled", true).oneTime("2s", "disable", function(){
+				$this.attr("disabled", false);
 			});
+			
 			var type = $("#type").val();
 			var value = $("#content").val();
-			var url = (type === "byKeyword") ? "${ctx}/dig-weibo-user/by-keyword/" : "${ctx}/dig-weibo-user/by-tags/";
-			var data = (type === "byKeyword") ? {"keyword" : value} : {"tags" : value};
+			var data = (type === "tags") ? {"tags" : value} : {"keyword" : value};
+			data['platform'] = $("#platform").val();
 			$.ajax({
-				url : url,
+				url : urlMapping[type],
 				type : "POST",
 				data : data,
 				success : function(data){
@@ -48,11 +55,21 @@
 <table cellpadding="0" cellspacing="0" border="0" width="100%">
 <tbody>
 <tr>
+<td width="150" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>微博平台：</td>
+<td colspan="2">
+	<select id="platform" name="platform" >
+		<option label="腾讯微博" value="QWEIBO"/>
+		<option label="新浪" value="SINA"/>
+	</select>
+</td>
+</tr>
+<tr>
 <td width="150" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>用户查找类型：</td>
 <td colspan="2">
 	<select id="type" name="type" >
-		<option label="最近说过" value="byKeyword"/>
-		<option label="标签" value="byTags"/>
+		<option label="最近说过" value="talking"/>
+		<option label="关键字" value="keyword"/>
+		<option label="标签" value="tags"/>
 	</select>
 </td>
 </tr>

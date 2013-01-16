@@ -5,16 +5,14 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import com.tobeface.modules.domain.AbstractDomain;
+import com.tobeface.modules.domain.AbstractDomainObj;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public class WeiboTask extends AbstractDomain {
-
-	private static final long serialVersionUID = 1L;
+public class WeiboTask extends AbstractDomainObj<Long, WeiboTask> {
 
 	private String name;
 	private long createTime;
@@ -61,7 +59,7 @@ public class WeiboTask extends AbstractDomain {
 		if (getHandleEvents().isEmpty()) {
 			return null;
 		}
-		
+
 		int lastIndex = getHandleEvents().size() - 1;
 		return getHandleEvents().get(lastIndex);
 	}
@@ -125,4 +123,6 @@ public class WeiboTask extends AbstractDomain {
 	public boolean hasUncommitHandleEvents() {
 		return !uncommitHandleEvents.isEmpty();
 	}
+
+	private static final long serialVersionUID = 1L;
 }

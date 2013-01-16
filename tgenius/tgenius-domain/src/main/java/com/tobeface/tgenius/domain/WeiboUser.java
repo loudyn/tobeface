@@ -8,20 +8,22 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
 
-import com.tobeface.modules.domain.DomainObject;
+import com.tobeface.modules.domain.DomainObj;
 import com.tobeface.modules.helper.JsonHelper;
-import com.tobeface.modules.table.annotations.TableField;
-import com.tobeface.modules.table.annotations.TableValueConverter;
-import com.tobeface.modules.table.annotations.TableValueConverters;
+import com.tobeface.modules.table.annotation.TableField;
+import com.tobeface.modules.table.annotation.TableValueConverter;
+import com.tobeface.modules.table.annotation.TableValueConverters;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
+public class WeiboUser implements DomainObj<WeiboUser>, Serializable {
 
 	private static final long serialVersionUID = 1L;
+
+	private WeiboPlatform platform;
 
 	@JsonProperty("comp")
 	private List<WeiboUserCompany> companies = new ArrayList<WeiboUserCompany>();
@@ -76,6 +78,14 @@ public class WeiboUser implements DomainObject<WeiboUser>, Serializable {
 	@TableField(columnIndex = 12, columnName = "是否实名认证")
 	@TableValueConverters(downstream = { @TableValueConverter(type = BooleanConverter.class, method = "convert") })
 	private boolean isRealname;
+
+	public WeiboPlatform getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(WeiboPlatform platform) {
+		this.platform = platform;
+	}
 
 	public List<WeiboUserCompany> getCompanies() {
 		return companies;

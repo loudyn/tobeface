@@ -27,29 +27,9 @@ public interface WeiboUserRepository {
 
 	/**
 	 * 
-	 * @param name
-	 * @return
-	 */
-	WeiboUser queryUniqueByName(String name);
-
-	/**
-	 * 
-	 * @param name
-	 * @return
-	 */
-	boolean existsByName(String name);
-
-	/**
-	 * 
 	 * @param entity
 	 */
 	void save(WeiboUser entity);
-
-	/**
-	 * 
-	 * @param which
-	 */
-	void deleteByName(String which);
 
 	/**
 	 * 
@@ -57,4 +37,18 @@ public interface WeiboUserRepository {
 	 */
 	void update(WeiboUser entity);
 
+	/**
+	 * 
+	 * @param platform
+	 * @param name
+	 * @return
+	 */
+	boolean existsByPlatformAndName(WeiboPlatform platform, String name);
+
+	/**
+	 * 
+	 * @param platform
+	 * @param name
+	 */
+	void deleteByPlatformAndName(WeiboPlatform platform, String name);
 }

@@ -1,12 +1,8 @@
 package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
-import javax.annotation.concurrent.NotThreadSafe;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.Preconditions;
+import com.tobeface.modules.lang.annotation.NotThreadSafe;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequest;
 import com.tobeface.tgenius.infrastructure.wapi.WeiboApiResponse;
 import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiException;
@@ -21,7 +17,9 @@ import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptions;
 @NotThreadSafe
 final class SleepAndRetryWeiboApiRequestStrategy extends AbstractWeiboApiRequestStrategy {
 
-	private Logger logger = LoggerFactory.getLogger(getClass());
+	private static final int DEFAULT_MAX_RETRY_TIME = 3;
+	private static final long DEFAULT_SLEEP_TIME = 3000;
+
 	private final int maxRetryTimes;
 	private final long sleepTime;
 
@@ -31,8 +29,16 @@ final class SleepAndRetryWeiboApiRequestStrategy extends AbstractWeiboApiRequest
 	 * 
 	 * @param sleepTime
 	 */
-	SleepAndRetryWeiboApiRequestStrategy(WeiboApiExceptionExplorer explorer, long sleepTime) {
-		this(explorer, 3, sleepTime);
+	SleepAndRetryWeiboApiRequestStrategy(WeiboApiExceptionExplorer explorer) {
+		this(explorer, DEFAULT_MAX_RETRY_TIME);
+	}
+
+	/**
+	 * 
+	 * @param sleepTime
+	 */
+	SleepAndRetryWeiboApiRequestStrategy(WeiboApiExceptionExplorer explorer, int maxRetryTimes) {
+		this(explorer, DEFAULT_MAX_RETRY_TIME, DEFAULT_SLEEP_TIME);
 	}
 
 	SleepAndRetryWeiboApiRequestStrategy(WeiboApiExceptionExplorer explorer, int maxRetryTimes, long sleepTime) {
@@ -45,23 +51,21 @@ final class SleepAndRetryWeiboApiRequestStrategy extends AbstractWeiboApiRequest
 	}
 
 	@Override
-	protected WeiboApiResponse continueExecute(WeiboApiRequest req, WeiboApiResponse preResp, WeiboApiException ex) {
-		
+	protected WeiboApiResponse continueExecute(WeiboApiRequest req, WeiboApiResponse prevResp, WeiboApiException ex) {
+		if (null == ex) {
+			return prevResp;
+		}
+
 		if (WeiboApiExceptions.isAccessLimit(ex) && canRetryAgain()) {
-			logger.warn(
-							"Access rate limit,sleep {} {} and retry again,retry {} times yet", 
-							new Object[] { sleepTime, "millsecond", retryTimes - 1 }
-						);
-			
+			getLogger().warn(
+								"Access rate limit,sleep {} {} and retry again,retry {} times yet",
+								new Object[] { sleepTime, "millsecond", retryTimes - 1 }
+					);
 			Lang.sleepQuietly(sleepTime);
 			return req.execute(this);
 		}
 
-		if (null != ex) {
-			throw ex;
-		}
-
-		return preResp;
+		throw ex;
 	}
 
 	private boolean canRetryAgain() {

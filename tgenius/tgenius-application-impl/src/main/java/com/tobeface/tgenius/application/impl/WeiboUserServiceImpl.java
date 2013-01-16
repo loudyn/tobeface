@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.tobeface.modules.domain.Page;
 import com.tobeface.tgenius.application.WeiboUserService;
+import com.tobeface.tgenius.domain.WeiboPlatform;
 import com.tobeface.tgenius.domain.WeiboUser;
 import com.tobeface.tgenius.domain.WeiboUserRepository;
 
@@ -32,20 +33,15 @@ public class WeiboUserServiceImpl implements WeiboUserService {
 	public List<WeiboUser> query(Object object) {
 		return weiboUserRepository.query(object);
 	}
-
+	
 	@Override
-	public WeiboUser queryUniqueByName(String name) {
-		return weiboUserRepository.queryUniqueByName(name);
+	public void deleteByPlatformAndName(WeiboPlatform platform, String name) {
+		weiboUserRepository.deleteByPlatformAndName(platform, name);
 	}
 
 	@Override
-	public void deleteByName(String name) {
-		weiboUserRepository.deleteByName(name);
-	}
-
-	@Override
-	public boolean existsByName(String name) {
-		return weiboUserRepository.existsByName(name);
+	public boolean existsByPlatformAndName(WeiboPlatform platform, String name) {
+		return weiboUserRepository.existsByPlatformAndName(platform, name);
 	}
 
 	@Override

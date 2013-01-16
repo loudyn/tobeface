@@ -2,14 +2,14 @@ package com.tobeface.tgenius.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-import com.tobeface.modules.domain.ValueObject;
+import com.tobeface.modules.domain.ValueObj;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public class WeiboUserLocation implements ValueObject<WeiboUserLocation> {
+public class WeiboUserLocation implements ValueObj<WeiboUserLocation> {
 
 	private long longitude = -1;
 	private long latitude = -1;

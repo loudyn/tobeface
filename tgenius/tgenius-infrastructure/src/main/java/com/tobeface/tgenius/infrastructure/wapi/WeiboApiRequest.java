@@ -5,10 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+
+import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableMap;
 import com.tobeface.modules.helper.CodeHelper;
 import com.tobeface.modules.lang.Preconditions;
 import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategies;
+import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategy;
 
 /**
  * 
@@ -31,6 +36,7 @@ public final class WeiboApiRequest {
 	public WeiboApiRequest(String url, WeiboApiRequestVerb verb) {
 		Preconditions.hasText(url);
 		Preconditions.notNull(verb);
+
 		this.url = url;
 		this.verb = verb;
 	}
@@ -86,7 +92,7 @@ public final class WeiboApiRequest {
 	 * @return
 	 */
 	public WeiboApiResponse execute() {
-		return execute(WeiboApiRequestStrategies.newNOP());
+		return WeiboApiRequestPerformer.perform(this, WeiboApiRequestStrategies.newNOP());
 	}
 
 	/**
@@ -180,6 +186,32 @@ public final class WeiboApiRequest {
 	 */
 	public boolean isGetVerb() {
 		return getVerb() == WeiboApiRequestVerb.GET;
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder().append(getUrl()).append(getParams()).append(getVerb()).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+
+		if (null == obj || getClass() != obj.getClass()) {
+			return false;
+		}
+
+		WeiboApiRequest other = (WeiboApiRequest) obj;
+		return new EqualsBuilder().append(getUrl(), other.getUrl())
+									.append(getParams(), other.getParams())
+									.append(getVerb(), other.getVerb()).isEquals();
+	}
+
+	@Override
+	public String toString() {
+		return Objects.toStringHelper(this).add("url", getUrl()).add("verb", getVerb()).add("params", getParams()).toString();
 	}
 
 	/**

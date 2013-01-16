@@ -1,5 +1,6 @@
 package com.tobeface.tgenius.infrastructure.wapi;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -28,10 +29,13 @@ import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.Preconditions;
-import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiException;
+import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptions;
+import com.tobeface.tgenius.infrastructure.wapi.strategy.WeiboApiRequestStrategy;
 
 /**
  * 
@@ -75,6 +79,8 @@ final class WeiboApiRequestPerformer {
 		}
 	}
 
+	private final static Logger logger = LoggerFactory.getLogger(WeiboApiRequestPerformer.class);
+
 	/**
 	 * 
 	 * @param req
@@ -82,7 +88,9 @@ final class WeiboApiRequestPerformer {
 	 */
 	static WeiboApiResponse perform(WeiboApiRequest req, WeiboApiRequestStrategy strategy) {
 		Preconditions.notNull(req);
+		Preconditions.notNull(strategy);
 
+		logger.debug("perform {}.", new Object[] { req });
 		HttpUriRequest httpReq = WeiboApiRequestPerformer.transform(req);
 		HttpEntity entity = null;
 		try {
@@ -94,8 +102,10 @@ final class WeiboApiRequestPerformer {
 			HttpResponse httpResp = client.execute(httpReq);
 			entity = httpResp.getEntity();
 			return strategy.continueExecute(req, new WeiboApiResponse(EntityUtils.toString(entity)));
+		} catch (IOException e) {
+			throw WeiboApiExceptions.newServiceUnavaliable(e);
 		} catch (Exception e) {
-			throw new WeiboApiException(e);
+			throw WeiboApiExceptions.newWeiboApiException(e);
 		} finally {
 			EntityUtils.consumeQuietly(entity);
 		}
@@ -114,12 +124,12 @@ final class WeiboApiRequestPerformer {
 			}
 
 			HttpPost post = new HttpPost(req.getUrl());
-			List<NameValuePair> postParams = new ArrayList<NameValuePair>();
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			for (Entry<String, Object> entry : req.getParams().entrySet()) {
-				postParams.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
+				params.add(new BasicNameValuePair(entry.getKey(), entry.getValue().toString()));
 			}
 
-			post.setEntity(new UrlEncodedFormEntity(postParams, Charset.forName("UTF-8")));
+			post.setEntity(new UrlEncodedFormEntity(params, Charset.forName("UTF-8")));
 			return post;
 		} catch (Exception e) {
 			throw Lang.uncheck(e);

@@ -2,18 +2,27 @@ package com.tobeface.tgenius.domain;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-import com.tobeface.modules.domain.ValueObject;
+import com.tobeface.modules.domain.ValueObj;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public class WeiboTalking implements ValueObject<WeiboTalking> {
+public class WeiboTalking implements ValueObj<WeiboTalking> {
 
+	private WeiboPlatform platform;
 	private WeiboUserLocation location;
 	private WeiboTalkingTime talkingTime;
 	private String keyword;
+
+	public WeiboPlatform getPlatform() {
+		return platform;
+	}
+
+	public void setPlatform(WeiboPlatform platform) {
+		this.platform = platform;
+	}
 
 	public WeiboUserLocation getLocation() {
 		return location;
@@ -108,8 +117,8 @@ public class WeiboTalking implements ValueObject<WeiboTalking> {
 	@Override
 	public boolean sameValueAs(WeiboTalking other) {
 		return new EqualsBuilder().append(getLocation(), other.getLocation())
-									.append(getTalkingTime(), other.getTalkingTime())
-									.append(getKeyword(), other.getKeyword()).isEquals();
+				.append(getTalkingTime(), other.getTalkingTime())
+				.append(getKeyword(), other.getKeyword()).isEquals();
 	}
 
 }

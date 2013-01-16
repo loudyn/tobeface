@@ -8,27 +8,25 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <script type="text/javascript">
 	var urlMapping = {
-						"letterByNames" : "${ctx}/weibo-bomb-msg/letter-by-names/",
-						"letterByTalkabout" : "${ctx}/weibo-bomb-msg/letter-by-talkabout/",
-						"mentionByRelay" : "${ctx}/weibo-bomb-msg/mention-by-relay/",
-						"mentionByTalkabout" : "${ctx}/weibo-bomb-msg/mention-by-talkabout/"
+						"letterByNames" : "${ctx}/weibo-bomb/letter/",
+						"mentionByNames" : "${ctx}/weibo-bomb/mention/"
 					};
 	$(function(){
-		$("#type").change(function(){
-			var $this = $(this);
-			var value = $this.val();
-			if(value === "mentionByRelay"){
-				$("#nameOrKeywordTr").hide();
-			} else{
-				$("#nameOrKeywordTr").show();
-				if(value.indexOf("Talkabout") !== -1){
-					$("#nameOrKeywordTd").empty().append("<span class=\"red\" style=\"color: red;\" >*</span>关键词：");
-				}else{
-					$("#nameOrKeywordTd").empty().append("<span class=\"red\" style=\"color: red;\" >*</span>用户名(以;分隔)：");
-				}
-			}
+// 		$("#type").change(function(){
+// 			var $this = $(this);
+// 			var value = $this.val();
+// 			if(value === "mentionByRelay"){
+// 				$("#nameOrKeywordTr").hide();
+// 			} else{
+// 				$("#nameOrKeywordTr").show();
+// 				if(value.indexOf("Talkabout") !== -1){
+// 					$("#nameOrKeywordTd").empty().append("<span class=\"red\" style=\"color: red;\" >*</span>关键词：");
+// 				}else{
+// 					$("#nameOrKeywordTd").empty().append("<span class=\"red\" style=\"color: red;\" >*</span>用户名(以;分隔)：");
+// 				}
+// 			}
 			
-		});
+// 		});
 		$("#commit").click(function(){
 			var $this = $(this);
 			$this.attr("disabled", true).oneTime("2s", "disable", function(){
@@ -37,7 +35,8 @@
 			
 			var type = $("#type").val();
 			var data = {"content" : $("#content").val()};
-			data[type.indexOf("Talkabout") !== -1 ? "keyword" : "names"] = $("#nameOrKeyword").val();
+			data["names"] = $("#names").val();
+			data["platform"] = $("#platform").val();
 			$.ajax({
 				url : urlMapping[type],
 				type : "POST",
@@ -74,16 +73,25 @@
 <td colspan="2">
 	<select id="type" name="type" >
 		<option label="私信(通过用户名)" value="letterByNames"/>
-		<option label="私信(通过用户发表的微博)" value="letterByTalkabout"/>
-		<option label="转播(随机转播热门微博)" value="mentionByRelay"/>
-		<option label="转播(随机@)" value="mentionByTalkabout"/>
+<!-- 		<option label="私信(通过用户名文件)" value="letterByFile"/> -->
+		<option label="@(通过用户名)" value="mentionByNames"/>
+<!-- 		<option label="@(通过用户名文件)" value="mentionByFile"/> -->
 	</select>
 </td>
 </tr>
-<tr id="nameOrKeywordTr">
-<td id="nameOrKeywordTd" width="240" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>用户名(以;分隔)：</td>
+<tr>
+<td width="150" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>微博平台：</td>
 <td colspan="2">
-	<input id="nameOrKeyword" name="nameOrKeyword" class="input5 fontMar" type="text" value=""/>
+	<select id="platform" name="platform" >
+		<option label="腾讯微博" value="QWEIBO"/>
+		<option label="新浪" value="SINA"/>
+	</select>
+</td>
+</tr>
+<tr id="namesTr">
+<td width="240" align="right" nowrap="nowrap"><span class="red" style="color: red;" >*</span>用户名(以;分隔)：</td>
+<td colspan="2">
+	<textarea rows="5" cols="80" id="names"></textarea>
 </td>
 </tr>
 <tr>

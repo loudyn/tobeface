@@ -8,7 +8,7 @@
 	</settings>
 	
 	<typeAliases>
-		<typeAlias type="com.tobeface.tgenius.domain.WeiboAppKeys" alias="WeiboAppKeys" />
+		<typeAlias type="com.tobeface.tgenius.domain.appkey.WeiboAppKey" alias="WeiboAppKey" />
 		<typeAlias type="com.tobeface.tgenius.domain.WeiboUser" alias="WeiboUser" />
 		<typeAlias type="com.tobeface.tgenius.domain.task.WeiboTask" alias="WeiboTask" />
 		<typeAlias type="com.tobeface.tgenius.domain.task.WeiboTaskHandleEvent" alias="WeiboTaskHandleEvent" />

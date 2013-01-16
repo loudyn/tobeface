@@ -1,6 +1,5 @@
 package com.tobeface.tgenius.infrastructure.wapi.strategy;
 
-import com.tobeface.tgenius.infrastructure.wapi.WeiboApiRequestStrategy;
 import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplorer;
 
 /**
@@ -9,7 +8,7 @@ import com.tobeface.tgenius.infrastructure.wapi.exception.WeiboApiExceptionExplo
  * 
  */
 public final class WeiboApiRequestStrategies {
-	
+
 	/**
 	 * 
 	 * @return
@@ -23,8 +22,17 @@ public final class WeiboApiRequestStrategies {
 	 * @param explorer
 	 * @return
 	 */
-	public static WeiboApiRequestStrategy newFastFail(WeiboApiExceptionExplorer explorer) {
-		return new FastFailWeiboApiRequestStrategy(explorer);
+	public static WeiboApiRequestStrategy newFailFast(WeiboApiExceptionExplorer explorer) {
+		return new FailFastWeiboApiRequestStrategy(explorer);
+	}
+
+	/**
+	 * 
+	 * @param explorer
+	 * @return
+	 */
+	public static WeiboApiRequestStrategy newFailSafe(WeiboApiExceptionExplorer explorer) {
+		return new FailSafeWeiboApiRequestStrategy(explorer);
 	}
 
 	/**
@@ -33,8 +41,18 @@ public final class WeiboApiRequestStrategies {
 	 * @param sleepTime
 	 * @return
 	 */
-	public static WeiboApiRequestStrategy newSleepAndRetry(WeiboApiExceptionExplorer explorer, long sleepTime) {
-		return new SleepAndRetryWeiboApiRequestStrategy(explorer, sleepTime);
+	public static WeiboApiRequestStrategy newSleepAndRetry(WeiboApiExceptionExplorer explorer) {
+		return new SleepAndRetryWeiboApiRequestStrategy(explorer);
+	}
+
+	/**
+	 * 
+	 * @param explorer
+	 * @param sleepTime
+	 * @return
+	 */
+	public static WeiboApiRequestStrategy newSleepAndRetry(WeiboApiExceptionExplorer explorer, int maxRetryTimes) {
+		return new SleepAndRetryWeiboApiRequestStrategy(explorer, maxRetryTimes);
 	}
 
 	/**

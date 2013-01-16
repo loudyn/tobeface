@@ -17,7 +17,7 @@ public final class WeiboApiResponse {
 	private final Map<String, Object> mapResult;
 
 	@SuppressWarnings("unchecked")
-	public WeiboApiResponse(String resp) {
+	WeiboApiResponse(String resp) {
 		Preconditions.hasText(resp);
 		this.mapResult = JsonHelper.fromJsonString(resp, Map.class);
 	}
@@ -73,6 +73,16 @@ public final class WeiboApiResponse {
 			}
 
 			return objResult;
+		}
+
+		/**
+		 * 
+		 * @param entityClazz
+		 * @return
+		 */
+		public <T> T get(Class<T> entityClazz) {
+			Object obj = get();
+			return JsonHelper.newfor(obj, entityClazz);
 		}
 
 		private boolean isUnacceptableAction(Map<String, Object> mapResult, String action) {

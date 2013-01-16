@@ -14,9 +14,10 @@
 	</modules>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<local.repository.path>file://${project.basedir}/lib/</local.repository.path>
 		<java-version>1.6</java-version>
 		<org.springframework-version>3.1.0.RELEASE</org.springframework-version>
-		<com.tobeface.modules.version>0.0.1</com.tobeface.modules.version>
+		<com.tobeface.modules.version>0.0.2</com.tobeface.modules.version>
 	</properties>
 
 	<dependencyManagement>
@@ -43,12 +44,33 @@
 				<artifactId>modules-orm</artifactId>
 				<version>${com.tobeface.modules.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>com.tobeface</groupId>
 				<artifactId>modules-table</artifactId>
 				<version>${com.tobeface.modules.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-web</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>project-lib</id>
+			<url>${local.repository.path}</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
 </project>

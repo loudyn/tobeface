@@ -1,38 +1,38 @@
 package com.tobeface.tgenius.domain;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-import com.tobeface.modules.domain.ValueObject;
-import com.tobeface.modules.lang.Preconditions;
-import com.tobeface.modules.lang.Strings;
+import com.tobeface.modules.domain.ValueObj;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public final class WeiboMention implements ValueObject<WeiboMention> {
-	
+public final class WeiboMention implements ValueObj<WeiboMention> {
+
+	private WeiboPlatform platform;
 	private List<String> names = new ArrayList<String>();
 	private String content;
 
-	/**
-	 * 
-	 * @param username
-	 * @return
-	 */
-	public WeiboMention mention(String username) {
-		Preconditions.hasText(username);
-		if (username.startsWith("@")) {
-			names.add(username);
-			return this;
-		}
+	public WeiboPlatform getPlatform() {
+		return platform;
+	}
 
-		names.add("@".concat(username));
-		return this;
+	public void setPlatform(WeiboPlatform platform) {
+		this.platform = platform;
+	}
+
+	public List<String> getNames() {
+		return null == names ? Collections.<String> emptyList() : names;
+	}
+
+	public void setNames(List<String> names) {
+		this.names = names;
 	}
 
 	/**
@@ -48,11 +48,7 @@ public final class WeiboMention implements ValueObject<WeiboMention> {
 	 * @return
 	 */
 	public String getContent() {
-		if (names.isEmpty()) {
-			return content;
-		}
-
-		return Strings.join(names, " ").concat(" ").concat(content);
+		return this.content;
 	}
 
 	@Override
