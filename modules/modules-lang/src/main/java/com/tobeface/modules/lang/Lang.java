@@ -386,6 +386,44 @@ public final class Lang {
 
 	/**
 	 * 
+	 * @param objs
+	 * @param predicate
+	 * @return
+	 */
+	public static <T> boolean all(List<T> objs, Predicate<T> predicate) {
+		Preconditions.notNull(objs);
+		Preconditions.notNull(predicate);
+
+		for (T obj : objs) {
+			if (!predicate.apply(obj)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param objs
+	 * @param predicate
+	 * @return
+	 */
+	public static <T> boolean any(List<T> objs, Predicate<T> predicate) {
+		Preconditions.notNull(objs);
+		Preconditions.notNull(predicate);
+
+		for (T obj : objs) {
+			if (predicate.apply(obj)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * 
 	 * @param obj
 	 * @param each
 	 */
@@ -508,7 +546,8 @@ public final class Lang {
 	 * @param function
 	 * @return
 	 */
-	public static <Input, Output> Iterator<Output> transform(final Iterator<Input> fromIterator, final Function<? super Input, ? extends Output> function) {
+	public static <Input, Output> Iterator<Output> transform(final Iterator<Input> fromIterator,
+			final Function<? super Input, ? extends Output> function) {
 		return new TransformedIterator<Input, Output>(fromIterator) {
 
 			@Override
@@ -540,7 +579,8 @@ public final class Lang {
 	 * @param function
 	 * @return
 	 */
-	public static <Input, Output> Iterable<Output> transform(final Iterable<Input> fromIterable, final Function<? super Input, ? extends Output> function) {
+	public static <Input, Output> Iterable<Output> transform(final Iterable<Input> fromIterable,
+			final Function<? super Input, ? extends Output> function) {
 		return new Iterable<Output>() {
 
 			@Override
@@ -557,7 +597,8 @@ public final class Lang {
 	 * @param function
 	 * @return
 	 */
-	public static <Input, Output> List<Output> transform(final List<Input> fromList, final Function<? super Input, ? extends Output> function) {
+	public static <Input, Output> List<Output> transform(final List<Input> fromList,
+															final Function<? super Input, ? extends Output> function) {
 		return fromList instanceof RandomAccess ? new TransformingRandomAccessList<Input, Output>(fromList, function)
 				: new TransformingSequentialList<Input, Output>(fromList, function);
 	}
@@ -572,7 +613,8 @@ public final class Lang {
 			if (milliseconds > 0) {
 				Thread.sleep(milliseconds);
 			}
-		} catch (Exception ignore) {}
+		} catch (Exception ignore) {
+		}
 	}
 
 	/**
