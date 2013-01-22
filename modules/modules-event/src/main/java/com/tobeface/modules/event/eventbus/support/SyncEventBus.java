@@ -10,31 +10,30 @@ import com.tobeface.modules.event.EventListener;
 import com.tobeface.modules.event.eventbus.EventBus;
 import com.tobeface.modules.lang.Lang;
 import com.tobeface.modules.lang.Preconditions;
+import com.tobeface.modules.lang.annotation.Beta;
 
 /**
  * 
  * @author loudyn
  * 
  */
-public class JDKEventBus implements EventBus {
+@Beta
+public class SyncEventBus implements EventBus {
+
 	private final List<EventListener> listeners = new CopyOnWriteArrayList<EventListener>();
 
 	private final ThreadLocal<ConcurrentLinkedQueue<EventWithListener>> eventsToDispatch = new ThreadLocal<ConcurrentLinkedQueue<EventWithListener>>() {
-
 		@Override
 		protected ConcurrentLinkedQueue<EventWithListener> initialValue() {
 			return new ConcurrentLinkedQueue<EventWithListener>();
 		}
-
 	};
 
 	private final ThreadLocal<Boolean> isDispatching = new ThreadLocal<Boolean>() {
-
 		@Override
 		protected Boolean initialValue() {
 			return false;
 		}
-
 	};
 
 	@Override
@@ -108,9 +107,9 @@ public class JDKEventBus implements EventBus {
 	 * @author loudyn
 	 * 
 	 */
-	class EventWithListener {
-		Event event;
-		EventListener listener;
+	final class EventWithListener {
+		final Event event;
+		final EventListener listener;
 
 		EventWithListener(Event event, EventListener listener) {
 			this.event = event;

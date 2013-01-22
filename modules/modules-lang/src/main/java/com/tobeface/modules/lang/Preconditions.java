@@ -106,53 +106,57 @@ public final class Preconditions {
 		return false;
 	}
 
-	public static void doesNotContain(String textToSearch, String substring) {
-		doesNotContain(
-						textToSearch, 
-						substring, 
-						"[Assertion failed] - this String argument must not contain the substring [" + substring + "]"
-					);
+	public static String doesNotContain(String textToSearch, String substring) {
+		return doesNotContain(
+								textToSearch, 
+								substring, 
+								"[Assertion failed] - this String argument must not contain the substring [" + substring + "]"
+						);
 	}
 
-	public static void doesNotContain(String textToSearch, String substring, String message) {
-		doesNotContain(textToSearch, substring, new IllegalArgumentException(message));
+	public static String doesNotContain(String textToSearch, String substring, String message) {
+		return doesNotContain(textToSearch, substring, new IllegalArgumentException(message));
 	}
 
-	public static void doesNotContain(String textToSearch, String substring, RuntimeException throwIfAssertFail) {
+	public static String doesNotContain(String textToSearch, String substring, RuntimeException throwIfAssertFail) {
 
 		if (isStringHasLength(textToSearch) && isStringHasLength(substring) && textToSearch.indexOf(substring) != -1) {
 			throw throwIfAssertFail;
 		}
+		
+		return textToSearch;
 	}
 
-	public static void notEmpty(Object[] array) {
-		notEmpty(array, "[Assertion failed] - this array must not be empty: it must contain at least 1 element");
+	public static Object[] notEmpty(Object[] array) {
+		return notEmpty(array, "[Assertion failed] - this array must not be empty: it must contain at least 1 element");
 	}
 
-	public static void notEmpty(Object[] array, String message) {
-		notEmpty(array, new IllegalArgumentException(message));
+	public static Object[] notEmpty(Object[] array, String message) {
+		return notEmpty(array, new IllegalArgumentException(message));
 	}
 
-	public static void notEmpty(Object[] array, RuntimeException throwIfAssertFail) {
+	public static Object[] notEmpty(Object[] array, RuntimeException throwIfAssertFail) {
 
 		if (isEmptyArray(array)) {
 			throw throwIfAssertFail;
 		}
+		
+		return array;
 	}
 
 	private static boolean isEmptyArray(Object[] array) {
 		return null == array || array.length <= 0;
 	}
 
-	public static void notNullElements(Object[] array) {
-		notNullElements(array, "[Assertion failed] - this array must not contain any null elements");
+	public static Object[] notNullElements(Object[] array) {
+		return notNullElements(array, "[Assertion failed] - this array must not contain any null elements");
 	}
 
-	public static void notNullElements(Object[] array, String message) {
-		notNullElements(array, new IllegalArgumentException(message));
+	public static Object[] notNullElements(Object[] array, String message) {
+		return notNullElements(array, new IllegalArgumentException(message));
 	}
 
-	public static void notNullElements(Object[] array, RuntimeException throwIfAssertFail) {
+	public static Object[] notNullElements(Object[] array, RuntimeException throwIfAssertFail) {
 		if (null == array) {
 			throw throwIfAssertFail;
 		}
@@ -162,45 +166,51 @@ public final class Preconditions {
 				throw throwIfAssertFail;
 			}
 		}
+		
+		return array;
 	}
 
-	public static void notEmpty(Collection<?> collection, String message) {
-		notEmpty(collection, new IllegalArgumentException(message));
+	public static Collection<?> notEmpty(Collection<?> collection) {
+		return notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
+	}
+	
+	public static Collection<?> notEmpty(Collection<?> collection, String message) {
+		return notEmpty(collection, new IllegalArgumentException(message));
 	}
 
-	public static void notEmpty(Collection<?> collection) {
-		notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
-	}
-
-	public static void notEmpty(Collection<?> collection, RuntimeException throwIfAssertFail) {
+	public static Collection<?> notEmpty(Collection<?> collection, RuntimeException throwIfAssertFail) {
 		if (isEmptyCollection(collection)) {
 			throw throwIfAssertFail;
 		}
+		
+		return collection;
 	}
 
 	private static boolean isEmptyCollection(Collection<?> collection) {
 		return null == collection || collection.isEmpty();
 	}
-
-	public static void notEmpty(Map<?, ?> map, String message) {
-		notEmpty(map, new IllegalArgumentException(message));
+	
+	public static Map<?, ?> notEmpty(Map<?, ?> map) {
+		return notEmpty(map, "[Assertion failed] - this map must not be empty; it must contain at least one entry");
 	}
 
-	public static void notEmpty(Map<?, ?> map) {
-		notEmpty(map, "[Assertion failed] - this map must not be empty; it must contain at least one entry");
+	public static Map<?, ?> notEmpty(Map<?, ?> map, String message) {
+		return notEmpty(map, new IllegalArgumentException(message));
 	}
-
-	public static void notEmpty(Map<?, ?> map, RuntimeException throwIfAssertFail) {
+	
+	public static Map<?, ?> notEmpty(Map<?, ?> map, RuntimeException throwIfAssertFail) {
 		if (isEmptyMap(map)) {
 			throw throwIfAssertFail;
 		}
+		
+		return map;
 	}
 
 	private static boolean isEmptyMap(Map<?, ?> map) {
 		return null == map || map.isEmpty();
 	}
 
-	public static void isInstanceOf(Class<?> type, Object obj, String message) {
+	public static Object isInstanceOf(Class<?> type, Object obj, String message) {
 		notNull(type, "Type to check against must not be null");
 		if (!type.isInstance(obj)) {
 			throw new IllegalArgumentException(
@@ -211,17 +221,21 @@ public final class Preconditions {
 												type
 											);
 		}
+		
+		return obj;
 	}
 
-	public static void isInstanceOf(Class<?> clazz, Object obj) {
-		isInstanceOf(clazz, obj, "");
+	public static Object isInstanceOf(Class<?> clazz, Object obj) {
+		return isInstanceOf(clazz, obj, "");
 	}
 
-	public static void isInstanceOf(Class<?> type, Object obj, RuntimeException throwIfAssertFail) {
+	public static Object isInstanceOf(Class<?> type, Object obj, RuntimeException throwIfAssertFail) {
 		notNull(type, "Type to check against must not be null");
 		if (!type.isInstance(obj)) {
 			throw throwIfAssertFail;
 		}
+		
+		return obj;
 	}
 
 	public static void isAssignable(Class<?> superType, Class<?> subType, String message) {

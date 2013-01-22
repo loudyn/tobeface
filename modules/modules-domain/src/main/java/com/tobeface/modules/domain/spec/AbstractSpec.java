@@ -26,8 +26,8 @@ public abstract class AbstractSpec<T> implements Spec<T> {
 			this.another = another;
 		}
 
-		public boolean isSatisfiedBy(T domainObj) {
-			return one.isSatisfiedBy(domainObj) && another.isSatisfiedBy(domainObj);
+		public boolean isSatisfiedBy(T entity) {
+			return one.isSatisfiedBy(entity) && another.isSatisfiedBy(entity);
 		}
 
 	}
@@ -50,8 +50,8 @@ public abstract class AbstractSpec<T> implements Spec<T> {
 			this.another = another;
 		}
 
-		public boolean isSatisfiedBy(T domainObj) {
-			return one.isSatisfiedBy(domainObj) || another.isSatisfiedBy(domainObj);
+		public boolean isSatisfiedBy(T entity) {
+			return one.isSatisfiedBy(entity) || another.isSatisfiedBy(entity);
 		}
 
 	}
@@ -73,8 +73,8 @@ public abstract class AbstractSpec<T> implements Spec<T> {
 			this.another = another;
 		}
 
-		public boolean isSatisfiedBy(T domainObj) {
-			return !another.isSatisfiedBy(domainObj);
+		public boolean isSatisfiedBy(T entity) {
+			return !another.isSatisfiedBy(entity);
 		}
 	}
 

@@ -14,7 +14,7 @@ public final class IPs {
 	 * 
 	 * @return
 	 */
-	public static String nextIp() {
+	public static String simulate() {
 		IPBoudary boudary = ipBoudaries[random.nextInt(ipBoudaries.length)];
 		long ipAsLong = boudary.getStart() + random.nextInt((int) (boudary.getEnd() - boudary.getStart()) + 1);
 		return long2Ip(ipAsLong);
