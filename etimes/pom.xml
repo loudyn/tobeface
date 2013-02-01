@@ -1,0 +1,61 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tobeface</groupId>
+	<artifactId>etimes</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<modules>
+		<module>etimes-domain-onsale</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<local.repository.path>file://${project.basedir}/lib/</local.repository.path>
+		<java-version>1.6</java-version>
+		<org.springframework-version>3.2.1.RELEASE</org.springframework-version>
+		<com.tobeface.modules.version>0.0.2</com.tobeface.modules.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-lang</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-domain</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.tobeface</groupId>
+				<artifactId>modules-helper</artifactId>
+				<version>${com.tobeface.modules.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-entitymanager</artifactId>
+				<version>4.1.1.Final</version>
+				<!-- will come with Hibernate core -->
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>project-lib</id>
+			<url>${local.repository.path}</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+	</repositories>
+</project>

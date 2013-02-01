@@ -1,0 +1,29 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Thu Jan 17 10:02:22 CST 2013
+file\://E\:\\github\\tobeface\\modules\\modules-domain/lib/.lastUpdated=1358388139525
+${project.parent.basedir}/.error=Could not transfer artifact com.tobeface\:modules-lang\:pom\:0.0.2 from/to project-lib (${project.parent.basedir})\: No connector available to access repository project-lib (${project.parent.basedir}) of type default using the available factories AsyncRepositoryConnectorFactory, WagonRepositoryConnectorFactory
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application-impl/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-domain/lib/.lastUpdated=1358386507443
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-infrastructure/lib/.lastUpdated=1358352931547
+file\://${project.parent.basedir}/lib/.lastUpdated=1358386560235
+file\://../lib/.error=
+file\://${project.parent.basedir}/lib/.error=
+file\://E\:\\github\\tobeface\\modules\\modules-event/lib/.error=
+http\://repo.maven.apache.org/maven2/.lastUpdated=1358352952126
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application/lib/.error=
+http\://repo.maven.apache.org/maven2/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application-impl/lib/.lastUpdated=1358352931968
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application/lib/.lastUpdated=1358352920830
+file\://E\:\\github\\tobeface\\modules\\modules-domain/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-domain/lib/.error=
+file\://../lib/.lastUpdated=1358386722603
+default-${project.parent.basedir}/.lastUpdated=1358386993308
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.lastUpdated=1358352944027
+file\://E\:\\github\\tobeface\\modules\\modules-event/lib/.lastUpdated=1358388142028
+file\://E\:\\github\\tobeface\\modules\\modules-helper/lib/.lastUpdated=1358388142229
+file\://E\:\\github\\tobeface\\modules\\modules-helper/lib/.error=
+file\://${parent.basedir}/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-infrastructure/lib/.error=
+17f20c649e1402a25c813c3e1eee87707a9ccf99@10.101.1.6\:80>default-http\://repo.maven.apache.org/maven2/.lastUpdated=1358352888085
+file\://${parent.basedir}/lib/.lastUpdated=1358386580519

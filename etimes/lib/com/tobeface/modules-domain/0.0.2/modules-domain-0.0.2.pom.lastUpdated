@@ -1,0 +1,23 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Thu Jan 17 09:43:13 CST 2013
+${project.parent.basedir}/.error=Could not transfer artifact com.tobeface\:modules-domain\:pom\:0.0.2 from/to project-lib (${project.parent.basedir})\: No connector available to access repository project-lib (${project.parent.basedir}) of type default using the available factories AsyncRepositoryConnectorFactory, WagonRepositoryConnectorFactory
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application-impl/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-domain/lib/.lastUpdated=1358386507443
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-infrastructure/lib/.lastUpdated=1358352931578
+file\://${project.parent.basedir}/lib/.lastUpdated=1358386560245
+file\://../lib/.error=
+file\://${project.parent.basedir}/lib/.error=
+http\://repo.maven.apache.org/maven2/.lastUpdated=1358352953282
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application/lib/.error=
+http\://repo.maven.apache.org/maven2/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application-impl/lib/.lastUpdated=1358352931984
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application/lib/.lastUpdated=1358352920845
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-domain/lib/.error=
+file\://../lib/.lastUpdated=1358386722614
+default-${project.parent.basedir}/.lastUpdated=1358386993318
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.lastUpdated=1358352944043
+file\://${parent.basedir}/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-infrastructure/lib/.error=
+file\://${parent.basedir}/lib/.lastUpdated=1358386580536
+17f20c649e1402a25c813c3e1eee87707a9ccf99@10.101.1.6\:80>default-http\://repo.maven.apache.org/maven2/.lastUpdated=1358352898319

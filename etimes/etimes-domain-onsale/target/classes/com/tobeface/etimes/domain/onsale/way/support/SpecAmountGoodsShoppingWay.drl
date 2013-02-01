@@ -1,0 +1,52 @@
+package com.tobeface.etimes.domain.onsale.way.support
+
+import com.tobeface.etimes.domain.onsale.GoodsShoppingList;
+import com.tobeface.etimes.domain.onsale.strategy.support.MinusCashGoodsShoppingStrategy;
+import com.tobeface.etimes.domain.onsale.strategy.support.DiscountGoodsShoppingStrategy;
+import com.tobeface.etimes.domain.onsale.strategy.support.GiveGiftsGoodsShoppingStrategy;
+import com.tobeface.etimes.domain.onsale.way.support.SpecAmountGoodsShoppingWay;
+
+rule "minusCashGoodShoppingStrategy on specAmountGoodsShoppingWay"
+no-loop true
+activation-group "specAmount"
+when
+	$strategy : MinusCashGoodsShoppingStrategy();
+	$goodsShoppingList : GoodsShoppingList();
+	$way : SpecAmountGoodsShoppingWay(specAmount <= $goodsShoppingList.getAmount());
+then
+	modify($goodsShoppingList) {
+		substractAmount($strategy.getMinusAmount()),
+		addSatisfiedGoodsShoppingStrategy($strategy);
+	};
+	System.out.println($goodsShoppingList.getAmount());
+end
+
+rule "discountGoodsShoppingStrategy on specAmountGoodsShoppingWay"
+no-loop true
+activation-group "specAmount"
+when
+	$strategy : DiscountGoodsShoppingStrategy();
+	$goodsShoppingList : GoodsShoppingList();
+	$way : SpecAmountGoodsShoppingWay(specAmount <= $goodsShoppingList.getAmount());
+then
+	modify($goodsShoppingList) {
+		multiplyAmount($strategy.getDiscount()),
+		addSatisfiedGoodsShoppingStrategy($strategy);
+	};
+	System.out.println($goodsShoppingList.getAmount());
+end
+
+rule "giveGiftsGoodsShoppingStrategy on specAmountGoodsShoppingWay"
+no-loop true
+activation-group "specAmount"
+when
+	$strategy : GiveGiftsGoodsShoppingStrategy();
+	$goodsShoppingList : GoodsShoppingList();
+	$way : SpecAmountGoodsShoppingWay(specAmount <= $goodsShoppingList.getAmount());
+then
+	modify($goodsShoppingList) {
+		addGiftItems($strategy.getGiftItems()),
+		addSatisfiedGoodsShoppingStrategy($strategy);
+	}
+	System.out.println($goodsShoppingList.getGiftItems().size());
+end

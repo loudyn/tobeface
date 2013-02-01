@@ -1,0 +1,12 @@
+#NOTE: This is an internal implementation file, its format can be changed without prior notice.
+#Thu Jan 17 09:03:05 CST 2013
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.lastUpdated=1358352944089
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application-impl/lib/.lastUpdated=1358352932031
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-infrastructure/lib/.lastUpdated=1358352921189
+file\://${project.parent.basedir}/lib/.error=
+17f20c649e1402a25c813c3e1eee87707a9ccf99@10.101.1.6\:80>default-http\://repo.maven.apache.org/maven2/.lastUpdated=1358352931531
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-infrastructure/lib/.error=
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-application-impl/lib/.error=
+file\://${project.parent.basedir}/lib/.lastUpdated=1358384585621
+http\://repo.maven.apache.org/maven2/.error=Could not transfer artifact com.tobeface\:modules-orm\:pom\:0.0.2 from/to central (http\://repo.maven.apache.org/maven2)\: connection timed out to http\://repo.maven.apache.org/maven2/com/tobeface/modules-orm/0.0.2/modules-orm-0.0.2.pom
+file\://E\:\\github\\tobeface\\tgenius\\tgenius-web/lib/.error=
