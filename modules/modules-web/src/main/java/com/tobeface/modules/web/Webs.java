@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 
 import com.tobeface.modules.lang.Lang;
+import com.tobeface.modules.lang.Preconditions;
+import com.tobeface.modules.lang.Strings;
 import com.tobeface.modules.web.exception.MaliciousRequestException;
 
 /**
@@ -41,7 +43,7 @@ public class Webs {
 	 * @return
 	 */
 	public static boolean isAjax(String requestedWith) {
-		return StringUtils.isNotBlank(requestedWith) ? "XMLHttpRequest".equals(requestedWith) : false;
+		return Strings.isBlank(requestedWith) ? false : "XMLHttpRequest".equals(requestedWith);
 	}
 
 	/**
@@ -49,11 +51,8 @@ public class Webs {
 	 * @param request
 	 * @return
 	 */
-	public static String requestIP(HttpServletRequest request) {
-		// the client didn't use proxy
-		if (null == request.getHeader(USE_PROXY)) {
-			return request.getRemoteAddr();
-		}
+	public static String getProxyIP(HttpServletRequest request) {
+		Preconditions.notNull(request);
 
 		// the client use proxy
 		String ip = request.getHeader(USE_PROXY);
@@ -73,6 +72,16 @@ public class Webs {
 			throw new MaliciousRequestException("Bad ip header!");
 		}
 		return ip;
+	}
+
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
+	public static String getIP(HttpServletRequest request) {
+		Preconditions.notNull(request);
+		return request.getRemoteAddr();
 	}
 
 	/**

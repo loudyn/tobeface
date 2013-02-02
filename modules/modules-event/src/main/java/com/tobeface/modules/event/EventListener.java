@@ -8,7 +8,7 @@ import com.tobeface.modules.lang.annotation.Beta;
  * 
  */
 @Beta
-public interface EventListener {
+public interface EventListener extends java.util.EventListener {
 
 	/**
 	 * 
